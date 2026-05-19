@@ -9,7 +9,6 @@ const scriptsDir = path.join(sourceDir, "scripts");
 const homepageDir = path.resolve(sourceDir, "..");
 const rootDir = path.resolve(sourceDir, "..");
 const siteOrigin = "https://groundtech.co";
-const basePath = process.env.BASE_PATH || "";
 const ogSourceFile = path.join(rootDir, "assets", "Ground-og-image.jpg");
 const ogOutputFile = path.join(homepageDir, "og-image.jpg");
 const socialImage = `${siteOrigin}/og-image.jpg`;
@@ -375,7 +374,7 @@ renderPage({
   function bundleCssForDist(entryFiles) {
     const raw = bundleCss(entryFiles);
     // fonts.css uses ../../../../assets/fonts/ relative to source/styles/
-    return raw.replace(/url\(["']?(?:\.\.\/)*assets\/fonts\//g, 'url("/assets/fonts/');
+    return raw.replace(/url\(["']?(?:\.\.\/)*assets\/fonts\//g, 'url("../assets/fonts/');
   }
 
   function writeBundleForDist(entryFiles, bundleName) {
@@ -396,11 +395,11 @@ renderPage({
     source = source
       .replace(
         /["']\.\.\/\.\.\/assets\/grid\/generated\/library\.generated\.js["']/,
-        '"/assets/grid/generated/library.generated.js"',
+        '"assets/grid/generated/library.generated.js"',
       )
       .replace(
         /["']\.\.\/\.\.\/assets\/grid\/grid-library\.js["']/,
-        '"/assets/grid/grid-library.js"',
+        '"assets/grid/grid-library.js"',
       );
 
     const base = entryFileName.replace(/\.js$/, "");
@@ -441,29 +440,28 @@ renderPage({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  ${basePath ? `<base href="${basePath}">` : ""}
   <title>${title}</title>
   <meta name="description" content="${description}">
   <link rel="canonical" href="${canonicalUrl}">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-  <link rel="apple-touch-icon" href="/favicon-180.svg">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="apple-touch-icon" href="favicon-180.svg">
 ${socialMeta}
-  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/IBMPlexSerif-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSerif-400.woff2" crossorigin>
   <script>document.documentElement.classList.add("js");</script>
-  <link rel="stylesheet" href="/css/${bundledCss}">
+  <link rel="stylesheet" href="css/${bundledCss}">
 </head>`;
   }
 
   function distRenderScripts(scripts) {
-    return scripts.map((s) => `  <script src="/js/${s}" defer></script>`).join("\n");
+    return scripts.map((s) => `  <script src="js/${s}" defer></script>`).join("\n");
   }
 
   // Rewrite all relative asset paths in rendered HTML to root-relative dist paths
   function distFixAssetPaths(html) {
     return html
-      .replace(/src="\.\.\/\.\.\/assets\/Logos\/Investors\//g, 'src="/assets/logos/investors/')
-      .replace(/src="\.\.\/\.\.\/assets\/Logos\/ground-wordmark\.svg"/g, 'src="/assets/logos/ground-wordmark.svg"')
-      .replace(/src="\.\.\/\.\.\/assets\/photos\//g, 'src="/assets/photos/');
+      .replace(/src="\.\.\/\.\.\/assets\/Logos\/Investors\//g, 'src="assets/logos/investors/')
+      .replace(/src="\.\.\/\.\.\/assets\/Logos\/ground-wordmark\.svg"/g, 'src="assets/logos/ground-wordmark.svg"')
+      .replace(/src="\.\.\/\.\.\/assets\/photos\//g, 'src="assets/photos/');
   }
 
   function distRenderPage({
