@@ -9,6 +9,7 @@ const scriptsDir = path.join(sourceDir, "scripts");
 const homepageDir = path.resolve(sourceDir, "..");
 const rootDir = path.resolve(sourceDir, "..");
 const siteOrigin = "https://groundtech.co";
+const basePath = process.env.BASE_PATH || "";
 const ogSourceFile = path.join(rootDir, "assets", "Ground-og-image.jpg");
 const ogOutputFile = path.join(homepageDir, "og-image.jpg");
 const socialImage = `${siteOrigin}/og-image.jpg`;
@@ -440,6 +441,7 @@ renderPage({
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  ${basePath ? `<base href="${basePath}">` : ""}
   <title>${title}</title>
   <meta name="description" content="${description}">
   <link rel="canonical" href="${canonicalUrl}">
