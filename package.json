@@ -1,0 +1,13 @@
+{
+  "name": "ground-homepage",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "build": "node source/build-homepage.js",
+    "dist": "node source/build-homepage.js",
+    "preview": "npx --yes serve dist -l 4000"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

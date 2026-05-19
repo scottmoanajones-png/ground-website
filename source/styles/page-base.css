@@ -1,0 +1,47 @@
+@import "./fonts.css";
+@import "./tokens.css";
+@import "./components.css";
+@import "./sections/navigation.css";
+@import "./sections/footer.css";
+
+.page-hero {
+  padding-top: clamp(140px, 18vw, 200px);
+  padding-bottom: 0;
+  border-bottom: 1px solid var(--ink-rule);
+}
+
+.page-hero-inner {
+  max-width: 820px;
+  padding-bottom: clamp(56px, 8vw, 96px);
+}
+
+.page-hero-inner .eyebrow {
+  margin-bottom: 18px;
+}
+
+.page-hero-inner h1 {
+  max-width: none;
+  margin: 0 0 22px;
+  font-size: var(--text-5xl);
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.page-hero-body {
+  max-width: 56ch;
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
+  line-height: 1.68;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.body-link {
+  color: var(--yield);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity var(--transition);
+}
+
+.body-link:hover {
+  opacity: 0.78;
+}

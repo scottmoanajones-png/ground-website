@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light;
+
+  /* ── Type Families ───────────────────────────────────── */
+  --font-sans:  "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, serif;
+  --font-mono:  "IBM Plex Mono", "Courier New", monospace;
+
+  /* ── Type Scale ──────────────────────────────────────── */
+  /* Fixed micro: value labels, platform tags              */
+  --text-2xs:  10px;
+  /* Fixed labels: eyebrows, nav, buttons, footer headers  */
+  --text-xs:   11px;
+  /* Small: captions, fine print, legal notices            */
+  --text-sm:   clamp(0.78rem, 0.9vw, 0.875rem);
+  /* Base: body copy, form fields                          */
+  --text-base: clamp(0.94rem, 1.1vw, 1.06rem);
+  /* Medium: lead text, hero body, taglines                */
+  --text-md:   clamp(1rem, 1.3vw, 1.15rem);
+  /* Large: platform descriptions, card prose              */
+  --text-lg:   clamp(1.1rem, 1.75vw, 1.45rem);
+  /* XL: subheadings, quotes, about names                  */
+  --text-xl:   clamp(1.3rem, 2.2vw, 1.9rem);
+  /* 2XL: medium section headings                          */
+  --text-2xl:  clamp(1.8rem, 3.2vw, 2.6rem);
+  /* 3XL: primary section headings                         */
+  --text-3xl:  clamp(2.2rem, 4.2vw, 3.6rem);
+  /* 4XL: hero headline                                    */
+  --text-4xl:  clamp(3rem, 5.5vw, 5rem);
+  /* 5XL: oversized display                                */
+  --text-5xl:  clamp(4rem, 7.5vw, 7rem);
+
+  --paper-rgb: 243 240 233;
+  --paper-soft-rgb: 247 244 238;
+  --ink-rgb: 25 33 29;
+  --yield-rgb: 11 138 77;
+
+  --paper: rgb(var(--paper-rgb));
+  --paper-strong: #ede9e2;
+  --paper-soft: rgb(var(--paper-soft-rgb));
+  --ink: rgb(var(--ink-rgb));
+  --ink-soft: rgb(var(--ink-rgb) / 0.72);
+  --ink-faint: rgb(var(--ink-rgb) / 0.46);
+  --ink-rule: rgb(var(--ink-rgb) / 0.13);
+  --ink-rule-strong: rgb(var(--ink-rgb) / 0.21);
+  --yield: rgb(var(--yield-rgb));
+  --yield-bright: #2ea866;
+  --yield-soft: rgb(var(--yield-rgb) / 0.12);
+  --hero-dark: #1c2b27;
+  --hero-grid-line: rgba(233, 240, 236, 0.14);
+  --hero-grid-soft: rgb(var(--ink-rgb) / 0.09);
+  --hero-grid-soft-strong: rgb(var(--ink-rgb) / 0.16);
+  --shell: min(100% - 48px, 1240px);
+  --section-space: clamp(76px, 10vw, 132px);
+  --hero-height: clamp(820px, 104vh, 1080px);
+  --grid-cell: 32px;
+  --transition: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  --shadow-soft: 0 20px 64px rgba(18, 29, 25, 0.08);
+  --shadow-panel: 0 16px 28px rgba(18, 29, 25, 0.04);
+}
+
+@media (max-width: 820px) {
+  :root {
+    --shell: min(100% - 32px, 1240px);
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --hero-height: 900px;
+  }
+}

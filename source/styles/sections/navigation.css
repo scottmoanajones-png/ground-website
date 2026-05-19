@@ -1,0 +1,224 @@
+.site-header {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  pointer-events: none;
+}
+
+.nav-shell {
+  position: relative;
+  overflow: hidden;
+  width: var(--shell);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(180px, 220px) 1fr auto;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 16px 14px 18px;
+  background: rgba(243, 240, 233, 0.62);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  border: 1px solid rgba(26, 33, 29, 0.08);
+  pointer-events: auto;
+  transition: border-color var(--transition), background-color var(--transition);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nav-shell {
+    animation: nav-glass-shimmer 10s ease-in-out infinite;
+  }
+}
+
+@keyframes nav-glass-shimmer {
+  0%,  100% { backdrop-filter: blur(7px) saturate(1.18); -webkit-backdrop-filter: blur(7px) saturate(1.18); }
+  24%        { backdrop-filter: blur(13px) saturate(1.34); -webkit-backdrop-filter: blur(13px) saturate(1.34); }
+  50%        { backdrop-filter: blur(4px) saturate(1.1); -webkit-backdrop-filter: blur(4px) saturate(1.1); }
+  76%        { backdrop-filter: blur(15px) saturate(1.4); -webkit-backdrop-filter: blur(15px) saturate(1.4); }
+}
+
+.nav-shimmer-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.brand {
+  width: min(100%, 176px);
+  color: #21332e;
+}
+
+.brand-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 28px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgb(var(--ink-rgb) / 0.72);
+  transition: color var(--transition);
+}
+
+.nav-links a {
+  transition: color var(--transition), opacity var(--transition);
+}
+
+.nav-links a:hover {
+  color: var(--ink);
+}
+
+.nav-shell > .button {
+  justify-self: end;
+  width: auto;
+}
+
+.nav-shell > .button.button-light {
+  background: #21332e;
+}
+
+.nav-shell > .button.button-light:hover {
+  background: rgba(33, 51, 46, 0.86);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 7px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: rgb(var(--ink-rgb) / 0.82);
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+/* Full-page overlay — outside <header> so it can truly fill the viewport.
+   The header pill (z-index: 40) sits above this (z-index: 35). */
+.nav-mobile {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  overflow: hidden;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.nav-mobile-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 24px;
+  text-align: center;
+}
+
+.nav-mobile-links {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xl);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.nav-mobile-links a {
+  display: block;
+  padding: 10px 0;
+  color: rgba(255, 255, 255, 0.72);
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    color var(--transition),
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-mobile-links a:hover {
+  color: #ffffff;
+}
+
+/* CTA button: inverted, pinned to bottom, matches nav-shell width */
+.nav-mobile-cta {
+  flex-shrink: 0;
+  width: var(--shell);
+  font-size: var(--text-sm);
+  color: rgba(26, 42, 37, 0.96);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: transparent;
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    color var(--transition),
+    background-color var(--transition),
+    opacity 380ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-mobile-cta:hover {
+  background: #ffffff;
+  color: rgba(26, 42, 37, 0.96);
+}
+
+@media (max-width: 820px) {
+  .site-header {
+    top: 14px;
+  }
+
+  .nav-shell {
+    grid-template-columns: 1fr auto;
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links,
+  .nav-shell > .button {
+    display: none;
+  }
+}
