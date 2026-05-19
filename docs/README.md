@@ -1,6 +1,6 @@
 # Homepage workflow
 
-This directory contains the editable source for the Ground marketing site pages in `/Users/scottjones/Documents/Codex/Ground/01-Current/homepage`.
+This directory contains the editable source for the Ground marketing site pages in `01-Current/website`.
 
 Edit the homepage in these places:
 
@@ -59,38 +59,47 @@ npm run build         # always produces dist/ as part of the build
 npm run preview       # serve dist/ locally on http://localhost:4000
 ```
 
-`dist/` is self-contained — every asset is copied in, every path is root-relative. Serve the `dist/` folder from any static host.
+`dist/` is self-contained — every asset is copied in, every path is relative. Serve the `dist/` folder from any static host.
 
-### GitHub Pages
+### GitHub Pages (staging)
 
-1. Push the `dist/` folder to your deploy branch (or use a GitHub Action).
-2. In repository Settings → Pages, set source to the `dist/` folder.
-3. Add a custom domain if needed (`groundtech.co`).
+Deployment is automated via `.github/workflows/deploy.yml`. Every push to `main`:
+
+1. Runs `npm run build`
+2. Pushes `dist/` to the `gh-pages` branch via `peaceiris/actions-gh-pages`
+
+Staging URL: **https://scottmoanajones-png.github.io/ground-website/**
+
+Repo: https://github.com/scottmoanajones-png/ground-website
+
+To deploy a change, commit and push to `main` — the Action handles the rest.
 
 ### Netlify / Vercel / any static host
 
 Point the publish directory to `dist/`. No extra config required.
 
-### Webflow (client handoff)
+### Custom domain (`groundtech.co`)
 
-For a Webflow-hosted site, the cleanest handoff is to share the `dist/` folder as a zip — the client's developer can import the HTML/CSS/JS manually, or use it as a reference for recreation in the Webflow canvas.
+1. Add a `CNAME` file to `dist/` containing `groundtech.co`
+2. In repository Settings → Pages → Custom domain, enter `groundtech.co`
+3. Add a CNAME DNS record at your registrar pointing to `scottmoanajones-png.github.io`
 
 ## Build behavior
 
 - Do not hand-edit `source/styles/*.bundle.css` or `source/scripts/*.min.js`; they are generated on each build.
 - `source/build-homepage.js` bundles CSS through the local `@import` graph, minifies and hashes CSS/JS, and writes HTML for both the local `homepage/` and `dist/`.
-- `dist/` gets root-relative paths (`/css/`, `/js/`, `/assets/`). Local `homepage/` HTML uses relative paths (`source/styles/`, `source/scripts/`, `../../assets/`).
+- `dist/` uses relative paths (`css/`, `js/`, `assets/`) so it works when served from any subpath, including GitHub Pages. Local HTML uses source-relative paths (`source/styles/`, `source/scripts/`, `../../assets/`).
 - Shared content like backers lives in `source/content/*.json`, not duplicated across section partials.
 - `renderProofItems(backers, variant)` accepts `"light"` (dark backgrounds) or `"dark"` (light backgrounds). The proof-strip uses `-light.svg`; the about backers section uses `-dark.svg`.
 - The proof-strip component (`sections/proof.css`) has a `.proof-strip--light` modifier. Add `sections/proof.css` to that page's `styleEntries` when using it on a light-background page.
 
 ## Local preview (source build)
 
-Serve the repo root (`01-Current/homepage/../../..`) and open `01-Current/homepage/index.html` in a browser. Serving only `01-Current/homepage` will break the relative `../../assets/` paths for fonts, logos, and photos.
+Serve the repo root (`01-Current/website`) and open `index.html` in a browser. Serving the `dist/` folder is the safer option as all paths are self-contained.
 
 **Preferred approach:** use `npm run preview` which serves the fully self-contained `dist/` and always works.
 
 ## Upstream dependencies
 
-- `assets/grid/generated/library.generated.js` is produced by `02-Tools/build-grid-library.js`.
-- Homepage fonts and shared logos live under `Codex/Ground/assets`; the build copies them into `dist/assets/` automatically.
+- `assets/grid/generated/library.generated.js` is produced by `02-Tools/build-grid-library.js` in the parent `Ground/` workspace. Copy the output into `assets/grid/generated/` and commit it when regenerating the grid library.
+- Fonts, logos, and photos live in the repo under `assets/` — they were copied from the parent `Ground/assets/` workspace and should be kept in sync manually if updated there.
