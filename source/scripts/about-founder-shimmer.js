@@ -7,6 +7,7 @@
   if (reduceMotion) {
     cards.forEach(card => {
       card.classList.add('is-revealed');
+      card.querySelector('.founder-photo-wrap').style.opacity = '1';
       card.querySelectorAll('.founder-bio > *').forEach(el => {
         el.style.opacity = '1';
         el.style.transform = 'none';
@@ -15,11 +16,13 @@
     return;
   }
 
-  const CELL = 32, WAVE = 26, JITTER = 12, FADE = 130;
-  const WHITE = [255, 255, 255];
+  const CELL = 32;
+  const WAVE = 26;
+  const JITTER = 10;
+  const FADE = 110; // ms per half of flash (0→peak→0 over FADE*2)
 
-  // Wave shimmer reveal: transparent → card chrome
-  function runReveal(card, delay, onDone) {
+  // Flash reveal: cells sweep 0 → peak → 0 (no lingering white, no pop on clear)
+  function runReveal(card, staggerDelay, onDone) {
     setTimeout(() => {
       const canvas = card.querySelector('.founder-shimmer-canvas');
       if (!canvas) return;
@@ -35,12 +38,13 @@
       const cells = [];
       for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-          cells.push({ r, c, delay: (r + c) * WAVE + Math.random() * JITTER });
+          cells.push({ r, c, d: (r + c) * WAVE + Math.random() * JITTER });
         }
       }
 
+      // Midpoint = when the wave front is halfway across the diagonal
       const maxDiag = (cols - 1 + rows - 1) * WAVE;
-      const midpoint = (maxDiag + FADE) / 2;
+      const midpoint = maxDiag * 0.5 + FADE;
       let midFired = false;
       const start = performance.now();
 
@@ -49,39 +53,54 @@
 
         if (!midFired && elapsed >= midpoint) {
           midFired = true;
+          // Card chrome appears instantly (no transition flash)
           card.style.transition = 'none';
           card.classList.add('is-revealed');
           requestAnimationFrame(() => { card.style.transition = ''; });
+
+          // Photo fades in first
+          const photoWrap = card.querySelector('.founder-photo-wrap');
+          if (photoWrap) photoWrap.style.opacity = '1';
+        }
+
+        ctx.clearRect(0, 0, W, H);
+        let allDone = true;
+
+        for (const { r, c, d } of cells) {
+          const e = elapsed - d;
+          if (e < FADE * 2) allDone = false;
+          if (e <= 0 || e >= FADE * 2) continue;
+
+          // Triangle flash: ease-in up, ease-out down
+          let a;
+          if (e < FADE) {
+            const t = e / FADE;
+            a = t * t;
+          } else {
+            const t = (e - FADE) / FADE;
+            a = 1 - t * t;
+          }
+
+          ctx.fillStyle = `rgba(255,255,255,${(a * 0.82).toFixed(3)})`;
+          ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
+        }
+
+        if (allDone) {
+          // All cells back to transparent — no pop, just stagger text in
+          ctx.clearRect(0, 0, W, H);
           card.querySelectorAll('.founder-bio > *').forEach((el, i) => {
             el.style.transitionDelay = `${i * 90}ms`;
             el.style.opacity = '1';
             el.style.transform = 'none';
           });
-        }
-
-        ctx.clearRect(0, 0, W, H);
-        let allDone = true;
-        for (const { r, c, delay: d } of cells) {
-          const t = Math.min(Math.max((elapsed - d) / FADE, 0), 1);
-          if (t < 1) allDone = false;
-          if (t <= 0) continue;
-          const a = 1 - (1 - t) * (1 - t);
-          ctx.fillStyle = `rgba(${WHITE.join(',')},${a.toFixed(3)})`;
-          ctx.fillRect(c * CELL, r * CELL, CELL, CELL);
-        }
-
-        if (allDone) {
-          setTimeout(() => {
-            ctx.clearRect(0, 0, W, H);
-            if (onDone) onDone();
-          }, 40);
+          if (onDone) onDone();
         } else {
           requestAnimationFrame(frame);
         }
       }
 
       requestAnimationFrame(frame);
-    }, delay);
+    }, staggerDelay);
   }
 
   // Cursor-following shimmer with idle drift
@@ -124,8 +143,8 @@
         ty = 0.35 + Math.cos(phase * 0.68) * 0.15;
       }
 
-      gx += ((tx - gx)) * (isIdle ? 0.016 : 0.072);
-      gy += ((ty - gy)) * (isIdle ? 0.016 : 0.072);
+      gx += (tx - gx) * (isIdle ? 0.016 : 0.072);
+      gy += (ty - gy) * (isIdle ? 0.016 : 0.072);
 
       ctx.clearRect(0, 0, W, H);
 
@@ -147,12 +166,14 @@
     requestAnimationFrame(frame);
   }
 
-  // Stagger reveal on scroll into view
+  // Observe cards, stagger reveal by index
   const observer = new IntersectionObserver((entries, obs) => {
     entries.forEach((entry, i) => {
       if (!entry.isIntersecting) return;
       obs.unobserve(entry.target);
-      runReveal(entry.target, i * 120, () => initHoverShimmer(entry.target));
+      // Find index among all cards for stagger
+      const idx = [...cards].indexOf(entry.target);
+      runReveal(entry.target, idx * 100, () => initHoverShimmer(entry.target));
     });
   }, { threshold: 0.1 });
 

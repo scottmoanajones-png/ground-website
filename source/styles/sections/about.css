@@ -10,8 +10,6 @@
   display: grid;
   grid-template-columns: 1fr;
   gap: 32px;
-  max-width: 720px;
-  margin-inline: auto;
 }
 
 .founder {
@@ -55,7 +53,12 @@
   box-shadow: var(--shadow-panel);
 }
 
-/* Text stagger hidden until reveal midpoint */
+/* Photo and text hidden until reveal — photo animates first */
+.js .founder-photo-wrap {
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .js .founder-bio > * {
   opacity: 0;
   transform: translateY(10px);
