@@ -150,6 +150,7 @@ function renderProofItems(backers, variant = "light") {
 }
 
 const commonScript = minifyJs("common.js");
+const aboutFounderShimmerScript = minifyJs("about-founder-shimmer.js");
 const homepageFoundationScript = minifyJs("homepage-foundation.js");
 const homepageValueScenesScript = minifyJs("homepage-value-scenes.js");
 const homepagePlatformSceneScript = minifyJs("homepage-platform-scene.js");
@@ -261,7 +262,7 @@ renderPage({
     renderTemplate("sections/about/founders.html"),
     aboutBackers,
   ],
-  scripts: [commonScript],
+  scripts: [commonScript, aboutFounderShimmerScript],
 });
 
 renderPage({
@@ -417,6 +418,7 @@ renderPage({
 
   // ── Build all dist JS ────────────────────────────────────────────────────────
   const dCommon              = minifyJsForDist("common.js");
+  const dAboutFounderShimmer = minifyJsForDist("about-founder-shimmer.js");
   const dFoundation          = minifyJsForDist("homepage-foundation.js");
   const dValueScenes         = minifyJsForDist("homepage-value-scenes.js");
   const dPlatformScene       = minifyJsForDist("homepage-platform-scene.js");
@@ -533,7 +535,7 @@ ${distRenderScripts(scripts)}
       renderTemplate("sections/about/founders.html"),
       aboutBackers,
     ],
-    scripts: [dCommon],
+    scripts: [dCommon, dAboutFounderShimmer],
   });
 
   distRenderPage({

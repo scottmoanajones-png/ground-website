@@ -9,27 +9,75 @@
 .founders-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 56px;
+  gap: 32px;
+  max-width: 720px;
+  margin-inline: auto;
 }
 
 .founder {
+  position: relative;
+  overflow: hidden;
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 40px;
+  grid-template-columns: 180px 1fr;
+  gap: 36px;
   align-items: start;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid var(--ink-rule);
+  box-shadow: var(--shadow-panel);
+  transition:
+    background 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
-.founder-bio {
-  max-width: 600px;
+/* Shimmer canvas — between photo and text */
+.founder-shimmer-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Pre-reveal: card invisible */
+.js .founder {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.js .founder.is-revealed {
+  background: rgba(255, 255, 255, 0.66);
+  border-color: var(--ink-rule);
+  box-shadow: var(--shadow-panel);
+}
+
+/* Text stagger hidden until reveal midpoint */
+.js .founder-bio > * {
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .founder-photo-wrap {
-  width: 200px;
+  position: relative;
+  z-index: 0;
+  width: 180px;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border: 1px solid var(--ink-rule);
   background: var(--paper-strong);
   flex-shrink: 0;
+}
+
+.founder-bio {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
 }
 
 .founder-photo {
@@ -105,9 +153,10 @@
   .founder {
     grid-template-columns: 1fr;
     gap: 24px;
+    padding: 28px;
   }
 
   .founder-photo-wrap {
-    width: min(100%, 200px);
+    width: min(100%, 180px);
   }
 }
