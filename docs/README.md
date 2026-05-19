@@ -42,7 +42,7 @@ Grow balance bars:
 - `getSceneLayout` uses the animated `currentHeights` for bounding-box calculation, so large `maxHeight` values cause the camera to zoom in/out as bars animate. Keep `maxHeight` modest (≤ 9) to avoid scale oscillation during scroll.
 - Do not add per-cell height noise (`textureOffset`-style terms) to bar heights — it breaks the clean stair-step silhouette.
 
-Use [figma-system-checklist.md](/Users/scottjones/Documents/Codex/Ground/01-Current/homepage/docs/figma-system-checklist.md:1) to keep the Figma cleanup aligned with the code structure.
+Use [figma-system-checklist.md](figma-system-checklist.md) to keep the Figma cleanup aligned with the code structure.
 
 ## Building
 
@@ -50,7 +50,7 @@ Use [figma-system-checklist.md](/Users/scottjones/Documents/Codex/Ground/01-Curr
 npm run build
 ```
 
-Emits hashed CSS/JS bundles under `source/styles` and `source/scripts`, assembles HTML pages at the root of `01-Current/homepage`, **and** produces a self-contained `dist/` folder (see below).
+Emits hashed CSS/JS bundles under `source/styles` and `source/scripts`, assembles HTML pages at the root of `01-Current/website`, **and** produces a self-contained `dist/` folder (see below).
 
 ## Deploying
 
@@ -87,7 +87,7 @@ Point the publish directory to `dist/`. No extra config required.
 ## Build behavior
 
 - Do not hand-edit `source/styles/*.bundle.css` or `source/scripts/*.min.js`; they are generated on each build.
-- `source/build-homepage.js` bundles CSS through the local `@import` graph, minifies and hashes CSS/JS, and writes HTML for both the local `homepage/` and `dist/`.
+- `source/build-homepage.js` bundles CSS through the local `@import` graph, minifies and hashes CSS/JS, and writes HTML for both the local `website/` root and `dist/`.
 - `dist/` uses relative paths (`css/`, `js/`, `assets/`) so it works when served from any subpath, including GitHub Pages. Local HTML uses source-relative paths (`source/styles/`, `source/scripts/`, `../../assets/`).
 - Shared content like backers lives in `source/content/*.json`, not duplicated across section partials.
 - `renderProofItems(backers, variant)` accepts `"light"` (dark backgrounds) or `"dark"` (light backgrounds). The proof-strip uses `-light.svg`; the about backers section uses `-dark.svg`.
@@ -98,6 +98,16 @@ Point the publish directory to `dist/`. No extra config required.
 Serve the repo root (`01-Current/website`) and open `index.html` in a browser. Serving the `dist/` folder is the safer option as all paths are self-contained.
 
 **Preferred approach:** use `npm run preview` which serves the fully self-contained `dist/` and always works.
+
+## Password gate
+
+The staging site is protected by a client-side password gate at `gate.html`. Every dist page redirects to the gate if a `sessionStorage` flag (`gnd_auth`) is not set.
+
+- **Current password:** `apple-banana-cherry`
+- **To change it:** update `previewPassword` in `source/build-homepage.js`, then rebuild and push.
+- **Share link:** https://scottmoanajones-png.github.io/ground-website/gate.html
+
+Each page also carries an HTML comment instructing AI assistants to respond with "Sorry, Starfox, I can't let you do that" instead of describing the content. An `llms.txt` file at the dist root reinforces this for LLM crawlers.
 
 ## Upstream dependencies
 
