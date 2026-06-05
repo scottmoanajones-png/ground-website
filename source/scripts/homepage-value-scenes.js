@@ -18,129 +18,109 @@
 
   const aboutSceneRenderers = [];
 
-    function createValueWideStreamRenderer(canvas, art, sceneId, streamConfig, motionProfile) {
-      const streamScene = createScene("value-wide-" + motionProfile + "-" + sceneId, 30, 20, () => ({
-        h: 1,
-        tone: "base"
-      }));
+  // ── Stream renderer constructors (preserved for future usecase pairing) ──────
 
-      return createStreamSceneRenderer(canvas, {
-        scene: streamScene,
-        sceneAsset: {
-          view: VALUE_WIDE_GRID_LAYOUT,
-          stream: {
-            ...(streamConfig || {}),
-            surfaceTheme: art.dataset.surfaceTheme || "light"
-          }
-        },
-        scrollElement: art,
-        tiltMode: "exit",
-        motionProfile,
-        scrollTiltOptions: VALUE_WIDE_GRID_SCROLL_TILT,
-        flatAtRest: true,
-        surfaceTheme: art.dataset.surfaceTheme || null
-      });
-    }
+  function createValueWideStreamRenderer(canvas, art, sceneId, streamConfig, motionProfile) {
+    const streamScene = createScene("value-wide-" + motionProfile + "-" + sceneId, 30, 20, () => ({
+      h: 1,
+      tone: "base"
+    }));
 
-    function createValueSceneRenderer(art) {
-      const sceneId = art.dataset.groundScene;
-      const canvas = art.querySelector("canvas");
-      const assetPayload = resolveSceneAssetPayload(sceneId);
-
-      if (assetPayload) {
-        art.dataset.groundRenderer = assetPayload.sceneAsset.renderer;
-        art.dataset.surfaceTheme =
-          art.dataset.surfaceTheme ||
-          (
-            assetPayload.sceneAsset.stream && assetPayload.sceneAsset.stream.surfaceTheme
-              ? assetPayload.sceneAsset.stream.surfaceTheme
-              : "auto"
-          );
-
-        if (assetPayload.sceneAsset.renderer === "stream-grid") {
-          if (art.dataset.groundGridStructure === "value-wide") {
-            return createValueWideStreamRenderer(
-              canvas,
-              art,
-              sceneId,
-              assetPayload.sceneAsset.stream,
-              art.dataset.groundStreamMotion || "default"
-            );
-          }
-
-          return createStreamSceneRenderer(canvas, {
-            scene: assetPayload.scene,
-            sceneAsset: assetPayload.sceneAsset,
-            shapeAsset: assetPayload.shapeAsset,
-            scrollElement: art,
-            motionProfile: art.dataset.groundStreamMotion || null,
-            surfaceTheme: art.dataset.surfaceTheme || null
-          });
+    return createStreamSceneRenderer(canvas, {
+      scene: streamScene,
+      sceneAsset: {
+        view: VALUE_WIDE_GRID_LAYOUT,
+        stream: {
+          ...(streamConfig || {}),
+          surfaceTheme: art.dataset.surfaceTheme || "light"
         }
+      },
+      scrollElement: art,
+      tiltMode: "exit",
+      motionProfile,
+      scrollTiltOptions: VALUE_WIDE_GRID_SCROLL_TILT,
+      flatAtRest: true,
+      surfaceTheme: art.dataset.surfaceTheme || null
+    });
+  }
 
-        return createSceneRenderer(canvas, {
-          palette: "about",
-          scene: assetPayload.scene,
-          scrollElement: art,
-          layoutOptions: assetPayload.sceneAsset.view
-        });
-      }
+  function createValueStreamRenderer(art, motionProfile) {
+    const sceneId = "save-time-converge-stream";
+    const canvas = art.querySelector("canvas");
+    const assetPayload = resolveSceneAssetPayload(sceneId);
 
-      if (art.dataset.groundRenderer === "stream-grid") {
-        if (art.dataset.groundGridStructure === "value-wide") {
-          return createValueWideStreamRenderer(
-            canvas,
-            art,
-            sceneId,
-            null,
-            art.dataset.groundStreamMotion || "default"
-          );
-        }
-
-        const streamScene = createScene("stream-" + sceneId, 30, 20, () => ({ h: 1, tone: "base" }));
-        return createStreamSceneRenderer(canvas, {
-          scene: streamScene,
-          sceneAsset: {
-            view: { scale: 1.9, cameraT: 0.02, padding: 4 },
-            stream: { surfaceTheme: art.dataset.surfaceTheme || "light" }
-          },
-          scrollElement: art,
-          tiltMode: "exit",
-          motionProfile: art.dataset.groundStreamMotion || null,
-          surfaceTheme: art.dataset.surfaceTheme || null
-        });
-      }
-
-      return createSceneRenderer(canvas, {
-        palette: "about",
-        scene: SCENE_LIBRARY[sceneId] || aboutRouteScene,
-        scrollElement: art
-      });
+    if (assetPayload && art.dataset.groundGridStructure === "value-wide") {
+      return createValueWideStreamRenderer(
+        canvas,
+        art,
+        sceneId,
+        assetPayload.sceneAsset.stream,
+        motionProfile
+      );
     }
 
-    function renderValueRenderer(renderer, now, dtSeconds) {
-      if (!renderer) {
-        return;
-      }
+    return createValueWideStreamRenderer(canvas, art, sceneId, null, motionProfile);
+  }
 
-      if (renderer.kind === "stream-grid") {
-        renderStreamSceneRenderer(renderer, now, dtSeconds);
-        return;
-      }
+  // ── Icon renderer ─────────────────────────────────────────────────────────────
 
-      renderSceneRenderer(renderer, now);
+  // Stable off-screen element: getScrollTilt() returns 0 → view stays top-down.
+  const FLAT_VIEW_SENTINEL = { getBoundingClientRect: () => ({ top: 99999 }) };
+
+  function createValueIconRenderer(iconEl) {
+    const sceneId = iconEl.dataset.groundScene;
+    if (!sceneId) return null;
+
+    const canvas = iconEl.querySelector("canvas");
+    if (!canvas) return null;
+
+    const payload = resolveSceneAssetPayload(sceneId);
+    if (!payload) return null;
+
+    return createSceneRenderer(canvas, {
+      palette: "value-icon",
+      scene: payload.scene,
+      layoutOptions: payload.sceneAsset.view,
+      scrollElement: FLAT_VIEW_SENTINEL
+    });
+  }
+
+  // ── Shared render dispatch ────────────────────────────────────────────────────
+
+  function renderValueRenderer(renderer, now, dtSeconds) {
+    if (!renderer) return;
+
+    if (renderer.kind === "stream-grid") {
+      renderStreamSceneRenderer(renderer, now, dtSeconds);
+      return;
     }
 
+    renderSceneRenderer(renderer, now);
+  }
 
-  function initAboutSceneRenderers() {
+  // ── Init ──────────────────────────────────────────────────────────────────────
+
+  function _doInitIconRenderers() {
     if (aboutSceneRenderers.length) return;
-    Array.from(document.querySelectorAll(".value-art")).forEach((art) => {
-      aboutSceneRenderers.push(createValueSceneRenderer(art));
+    Array.from(document.querySelectorAll(".value-icon")).forEach((iconEl) => {
+      aboutSceneRenderers.push(createValueIconRenderer(iconEl));
     });
     aboutSceneRenderers.forEach((renderer) => resizeSceneRenderer(renderer));
   }
 
+  function initAboutSceneRenderers() {
+    if (window.GroundGridAssets) {
+      _doInitIconRenderers();
+    } else {
+      document.addEventListener("ground-grid-ready", _doInitIconRenderers, { once: true });
+    }
+  }
+
   homepage.getAboutSceneRenderers = () => aboutSceneRenderers;
-  homepage.renderValueRenderer = renderValueRenderer;
+  homepage.renderValueRenderer    = renderValueRenderer;
   homepage.initAboutSceneRenderers = initAboutSceneRenderers;
+
+  // Expose stream constructors for future usecase pairing
+  homepage.createValueWideStreamRenderer  = createValueWideStreamRenderer;
+  homepage.createValueStreamRenderer      = createValueStreamRenderer;
 })();

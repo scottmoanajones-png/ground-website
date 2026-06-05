@@ -34,6 +34,7 @@
     initHeroGrid.started = true;
 
     const heroCopy = document.querySelector(".hero-copy");
+    const heroTitle = document.getElementById("hero-title");
 
     const heroSection = document.querySelector(".hero");
     const heroCanvas = document.getElementById("heroGrid");
@@ -132,6 +133,24 @@
     let darkCapturePool = [];
     let nextCaptureAt = 0;
 
+    function scrollNudgeEase(t) {
+      // cubic-bezier(0.16, 1, 0.3, 1) — easeOutExpo, matches --ease-out-expo design token
+      if (t <= 0) return 0;
+      if (t >= 1) return 1;
+      const x1 = 0.16, y1 = 1, x2 = 0.3, y2 = 1;
+      function bx(s) { const u = 1 - s; return 3 * u * u * s * x1 + 3 * u * s * s * x2 + s * s * s; }
+      function by(s) { const u = 1 - s; return 3 * u * u * s * y1 + 3 * u * s * s * y2 + s * s * s; }
+      function dbx(s) { const u = 1 - s; return 3 * u * u * x1 + 6 * u * s * (x2 - x1) + 3 * s * s * (1 - x2); }
+      let s = t;
+      for (let i = 0; i < 8; i++) {
+        const d = dbx(s);
+        if (Math.abs(d) < 1e-9) break;
+        s -= (bx(s) - t) / d;
+        s = clamp(s, 0, 1);
+      }
+      return by(s);
+    }
+
     function animateScrollTo(targetY, duration) {
       if (heroAutoNudgeAnimationFrame) {
         cancelAnimationFrame(heroAutoNudgeAnimationFrame);
@@ -141,16 +160,18 @@
       const startY = window.scrollY;
       const distance = targetY - startY;
       const startedAt = performance.now();
+      const htmlEl = document.documentElement;
+      htmlEl.style.scrollBehavior = "auto";
 
       function step(now) {
         const progress = clamp((now - startedAt) / duration, 0, 1);
-        const eased = easeOutCubic(progress);
-        window.scrollTo(0, startY + distance * eased);
+        window.scrollTo(0, startY + distance * scrollNudgeEase(progress));
 
         if (progress < 1) {
           heroAutoNudgeAnimationFrame = requestAnimationFrame(step);
         } else {
           heroAutoNudgeAnimationFrame = null;
+          htmlEl.style.scrollBehavior = "";
         }
       }
 
@@ -448,7 +469,7 @@
         const finalOrder = logoCells.reduce((maxOrder, cell) => Math.max(maxOrder, cell.order), 0);
         const introDurationMs =
           (heroConfig.logoIntroDelay + finalOrder * heroConfig.logoStagger + heroConfig.logoRiseDuration) * 1000;
-        heroAutoNudgeAt = logoAnimationStart + introDurationMs + 300;
+        heroAutoNudgeAt = logoAnimationStart + introDurationMs;
       }
     }
 
@@ -457,7 +478,7 @@
         return;
       }
 
-      if (heroCopy.classList.contains("is-visible") || window.scrollY > 8) {
+      if (window.scrollY > 8) {
         heroAutoNudgeHandled = true;
         return;
       }
@@ -467,10 +488,15 @@
       }
 
       heroAutoNudgeHandled = true;
-      animateScrollTo(
-        Math.min(240, Math.round(heroSection.getBoundingClientRect().height * 0.19)),
-        3000
-      );
+
+      const titleRect = (heroTitle || heroCopy).getBoundingClientRect();
+      const overshoot = titleRect.top - (window.innerHeight - 56);
+
+      if (overshoot <= 0) {
+        return;
+      }
+
+      animateScrollTo(window.scrollY + overshoot, 1800);
     }
 
     function rebuildGrid() {
@@ -944,6 +970,7 @@
       getAboutSceneRenderers().forEach((renderer) => renderValueRenderer(renderer, now, dtSeconds));
       const platformRenderer = getPlatformRenderer();
       if (platformRenderer) renderSceneRenderer(platformRenderer, now);
+      (homepage.getUsecaseStreamRenderers?.() || []).forEach((r) => renderValueRenderer(r, now, dtSeconds));
       maybeAutoNudgeHero(now);
       requestAnimationFrame(frame);
     }
@@ -1002,6 +1029,7 @@
       getAboutSceneRenderers().forEach((renderer) => resizeSceneRenderer(renderer));
       const platformRenderer = getPlatformRenderer();
       if (platformRenderer) resizeSceneRenderer(platformRenderer);
+      (homepage.getUsecaseStreamRenderers?.() || []).forEach((r) => resizeSceneRenderer(r));
     }
 
     // Coalesce resize events into one rAF tick. Native resize can fire dozens
@@ -1025,6 +1053,7 @@
     {
       const platformRenderer = getPlatformRenderer();
       if (platformRenderer) resizeSceneRenderer(platformRenderer);
+      (homepage.getUsecaseStreamRenderers?.() || []).forEach((r) => resizeSceneRenderer(r));
     }
 
     // Rotating hero headline

@@ -5,7 +5,7 @@
   min-height: var(--hero-height);
   overflow: clip;
   border-bottom: 1px solid var(--ink-rule);
-  background: #f2efe8;
+  background: var(--paper-strong);
 }
 
 .hero::before {
@@ -26,13 +26,13 @@
 
 .hero-split-dark {
   clip-path: polygon(var(--split-origin-x) 0, 100% 0, 100% var(--split-right-y));
-  background: #21332e;
+  background: var(--hero-dark);
   z-index: 0;
 }
 
 .hero-split-light {
   clip-path: polygon(0 12%, var(--split-origin-x) 0, 100% var(--split-right-y), 100% 100%, 0 100%);
-  background: #f3f0e9;
+  background: var(--paper);
   z-index: 0;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .accent--rotate {
-  display: inline-block;
+  display: block;
   transition: opacity 200ms ease, transform 220ms ease;
 }
 

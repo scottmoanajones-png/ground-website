@@ -11,7 +11,7 @@ main {
   border-bottom: 1px solid var(--ink-rule);
   background:
     radial-gradient(circle at 50% 18%, rgb(var(--yield-rgb) / 0.04), transparent 30%),
-    #f3f0e9;
+    var(--paper);
 }
 
 .error-hero::before {

@@ -30,11 +30,67 @@ Working rule for edits:
 - If the change is isolated to one homepage section, work in that section's module first and only pull shared code down into `homepage-foundation.js` when two or more modules need it.
 - Keep cross-module exports on `window.GroundHomepage` so the bootstrap and build order stay predictable.
 
+Current color-system rule:
+
+- The official neutral ramp is the cooler set in `tokens.css`:
+  `paper #ECF1F0`, `paper-soft #F2F6F5`, `paper-strong #E3EAE8`.
+- Treat `ink` / `hero-dark` as one primitive dark base.
+- The small semantic status set is:
+  `success #16693A`,
+  `warning #B88219`,
+  `error #B23A34`,
+  `info #2F628F`.
+- Keep `success` connected to the Ground green family, but treat it as a stronger operational fill than the primary brand CTA green.
+- In Figma, the locked local paint-style taxonomy for this palette is `Ground/V1/...`.
+- The animation system now uses one shared palette family rather than separate `about`, `platform`, and `stream` color systems.
+- Light vs dark animation surfaces may resolve different neutrals, but they should share the same signal range:
+  `signal-deep`, `signal-mid`, `signal-bright`, and `glow-soft`.
+- Before adding a new animation color, first ask whether it can be expressed as an alias or opacity variant of the existing tokens.
+
+Current type-system rule:
+
+- The official working set is role-based:
+  `Label XS 12`,
+  `UI Base 16`,
+  `Reading Base 21`,
+  `Title S 28`,
+  `Title M 37`,
+  `Section 50`,
+  `Hero 67`,
+  `Display XL 89`,
+  `Display XXL 118` (rare extension).
+- `21px` is the default prose size for reading-first marketing copy.
+- `16px` remains the compact UI/legal base for utility-heavy contexts.
+- Do not treat HTML heading tags as the type scale itself. Choose `h1`/`h2`/`h3` for document structure, then map them onto the right role-based token.
+
+Current shape rule:
+
+- Ground is a square brand.
+- Default corners should be `0px`.
+- If a component truly needs softening, cap the radius at `1px` or `2px`.
+- Do not introduce rounded, friendly, or consumer-style corner language into core brand surfaces by default.
+
 Platform scene animation:
 
 - `homepage-platform-scene.js` runs its own `requestAnimationFrame` loop that mutates `platformRenderer.activeSignals` (a `Set<"col:row">` string) each frame.
 - The foundation renderer reads `activeSignals` when drawing to determine which cells render as signal (green). No foundation changes are needed to drive new platform animations — only update `activeSignals`.
 - Cell key format is `"col:row"` (e.g. `"11:4"` = column 11, row 4). Verify against `createPlatformScene` in `homepage-foundation.js` if adding new signals.
+
+Animation palette note:
+
+- `homepage-foundation.js` is the source of truth for shared animation color behavior.
+- Keep value-card stream scenes on the `light` surface theme unless there is a clear reason to move them darker.
+- Do not reintroduce one-off scene palette branches unless the official shared palette cannot express the behavior.
+
+Value section camera transition:
+
+- The scroll-to-isometric tilt for value cards is controlled by `VALUE_WIDE_GRID_SCROLL_TILT` in `homepage-foundation.js`. `startRatio` and `endRatio` are viewport-height fractions (from the top) at which the tilt begins and completes. Currently `{ startRatio: 0.92, endRatio: 0.35, delayProgress: 0 }` — transition begins as the card enters the viewport bottom and completes before the reading zone.
+- `targetView` for all three value motion profiles is `mix(0.015, 0.34, scrollTilt)` — 0.015 is nearly flat (top-down) and 0.34 is the isometric target.
+
+Hero rotating headline:
+
+- The rotating words are defined in the `HERO_ACCENT_WORDS` array in `homepage-hero-grid.js` and cycle every 3 seconds via `setInterval`. Skipped when the tab is hidden or `prefers-reduced-motion` is set.
+- The `<br>` between "for" and the rotating `<span>` is intentional — it locks "for" in place and ensures the rotating word is always on its own line. Do not remove it. The span uses `display: block` so width changes between words are fully contained and cannot cause H1 height shifts or paragraph repositioning.
 
 Grow balance bars:
 
@@ -43,6 +99,8 @@ Grow balance bars:
 - Do not add per-cell height noise (`textureOffset`-style terms) to bar heights — it breaks the clean stair-step silhouette.
 
 Use [figma-system-checklist.md](figma-system-checklist.md) to keep the Figma cleanup aligned with the code structure.
+
+For the evolving client-facing visual guidance, see [visual-system-handoff-wip.md](visual-system-handoff-wip.md).
 
 ## Building
 
@@ -90,7 +148,9 @@ Point the publish directory to `dist/`. No extra config required.
 - `source/build-homepage.js` bundles CSS through the local `@import` graph, minifies and hashes CSS/JS, and writes HTML for both the local `website/` root and `dist/`.
 - `dist/` uses relative paths (`css/`, `js/`, `assets/`) so it works when served from any subpath, including GitHub Pages. Local HTML uses source-relative paths (`source/styles/`, `source/scripts/`, `../../assets/`).
 - Shared content like backers lives in `source/content/*.json`, not duplicated across section partials.
-- `renderProofItems(backers, variant)` accepts `"light"` (dark backgrounds) or `"dark"` (light backgrounds). The proof-strip uses `-light.svg`; the about backers section uses `-dark.svg`.
+- `renderProofItems(backers, variant, { reveal })` accepts `"light"` or `"dark"` as the variant, and an optional `{ reveal: false }` option to suppress `data-reveal` stagger attributes. The homepage proof-strip passes `{ reveal: false }` because the marquee animation replaces the reveal. The about backers section uses the default (`reveal: true`).
+- `renderProofItemsDup(backers, variant)` renders a second copy of the logos as non-interactive `<span>` elements (`aria-hidden`, empty `alt`) for the marquee loop. Always keep this in sync with `renderProofItems` if the logo list changes.
+- The proof-strip uses a CSS marquee at ≤900px (`animation: proof-scroll`) and a static centered flex layout above that breakpoint. The breakpoint and speed (`28s`) live in `source/styles/sections/proof.css`.
 - The proof-strip component (`sections/proof.css`) has a `.proof-strip--light` modifier. Add `sections/proof.css` to that page's `styleEntries` when using it on a light-background page.
 
 ## Local preview (source build)

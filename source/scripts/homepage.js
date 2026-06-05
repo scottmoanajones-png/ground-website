@@ -3,6 +3,8 @@
   if (!homepage) return;
 
   homepage.initUsecaseShimmer?.();
+  homepage.initUsecaseReveal?.();
+  homepage.initUsecasePanel?.();
   homepage.initAboutSceneRenderers?.();
   homepage.initPlatformScene?.();
   homepage.initHeroGrid?.();

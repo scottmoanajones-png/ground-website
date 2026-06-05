@@ -129,6 +129,10 @@ function pageHead({ title, description, styleEntries, bundleName, canonicalUrl, 
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="apple-touch-icon" href="/favicon-180.svg">
 ${socialMeta}
+  <link rel="preload" as="font" type="font/woff2" href="../../assets/fonts/IBMPlexSans-300.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="../../assets/fonts/IBMPlexSans.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="../../assets/fonts/IBMPlexMono-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="../../assets/fonts/IBMPlexMono-500.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="../../assets/fonts/IBMPlexSerif-400.woff2" crossorigin>
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="source/styles/${bundledCss}">
@@ -143,10 +147,16 @@ function renderBackerItems(backers, className) {
   return backers.map((b) => `          <span class="${className}">${b.name}</span>`).join("\n");
 }
 
-function renderProofItems(backers, variant = "light") {
-  return backers.map((b, i) => `          <a class="proof-chip" href="${b.url}" target="_blank" rel="noopener" aria-label="${b.name}" data-reveal style="--delay: ${i * 80}ms;">
+function renderProofItems(backers, variant = "light", { reveal = true } = {}) {
+  return backers.map((b, i) => `          <a class="proof-chip" href="${b.url}" target="_blank" rel="noopener" aria-label="${b.name}"${reveal ? ` data-reveal style="--delay: ${i * 80}ms;"` : ""}>
             <img src="../../assets/Logos/Investors/${b.logo}-${variant}.svg" alt="${b.name}" loading="lazy" decoding="async">
           </a>`).join("\n");
+}
+
+function renderProofItemsDup(backers, variant = "light") {
+  return backers.map((b) => `          <span class="proof-chip">
+            <img src="../../assets/Logos/Investors/${b.logo}-${variant}.svg" alt="" loading="lazy" decoding="async">
+          </span>`).join("\n");
 }
 
 const commonScript = minifyJs("common.js");
@@ -161,6 +171,8 @@ const homepageCTAStreamScript = minifyJs("homepage-cta-stream.js");
 const lazyGridScript = minifyJs("lazy-grid.js");
 const homepageScript = minifyJs("homepage.js");
 const error404SceneScript = minifyJs("404-scene.js");
+// TEMP demo override: value-icon clock/bars + shimmer (Path B stopgap).
+const valueIconShimmerScript = minifyJs("value-icon-shimmer.js");
 const homepageScripts = [
   commonScript,
   homepageFoundationScript,
@@ -172,15 +184,18 @@ const homepageScripts = [
   homepageCTAStreamScript,
   lazyGridScript,
   homepageScript,
+  valueIconShimmerScript,
 ];
 const header = renderTemplate("sections/header.html");
 const footer = renderTemplate("sections/footer.html");
 const backers = readJson("content/backers.json");
 const proofStrip = renderTemplate("sections/home/proof-strip.html", {
-  BACKERS_PROOF_ITEMS: renderProofItems(backers),
+  BACKERS_PROOF_ITEMS: renderProofItems(backers, "light", { reveal: false }),
+  BACKERS_PROOF_ITEMS_DUP: renderProofItemsDup(backers, "light"),
 });
 const aboutBackers = renderTemplate("sections/about/backers.html", {
-  BACKERS_PROOF_ITEMS: renderProofItems(backers, "dark"),
+  BACKERS_PROOF_ITEMS: renderProofItems(backers, "dark", { reveal: false }),
+  BACKERS_PROOF_ITEMS_DUP: renderProofItemsDup(backers, "dark"),
 });
 
 function renderPage({
@@ -233,8 +248,8 @@ renderPage({
     renderTemplate("sections/home/hero.html"),
     proofStrip,
     renderTemplate("sections/home/value.html"),
-    renderTemplate("sections/home/platforms.html"),
     renderTemplate("sections/home/usecases.html"),
+    renderTemplate("sections/home/cta.html"),
   ],
   scripts: homepageScripts,
 });
@@ -284,6 +299,17 @@ renderPage({
   bundleName: "faq",
   canonicalPath: "faq.html",
   sections: [renderTemplate("sections/faq/main.html")],
+  scripts: [commonScript],
+});
+
+renderPage({
+  outputFile: "brand-guide.html",
+  title: "Brand Guide — Ground",
+  description: "The reference layer for how Ground should look, move, and read: logo, color, typography, grid, motion, and voice.",
+  styleEntries: ["page-base.css", "sections/brand-guide.css"],
+  bundleName: "brand-guide",
+  canonicalPath: "brand-guide.html",
+  sections: [renderTemplate("sections/brand-guide/main.html")],
   scripts: [commonScript],
 });
 
@@ -451,6 +477,10 @@ renderPage({
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="apple-touch-icon" href="favicon-180.svg">
 ${socialMeta}
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSans-300.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSans.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexMono-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexMono-500.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSerif-400.woff2" crossorigin>
   <script>document.documentElement.classList.add("js");</script>
   <link rel="stylesheet" href="css/${bundledCss}">
@@ -506,8 +536,8 @@ ${distRenderScripts(scripts)}
       renderTemplate("sections/home/hero.html"),
       proofStrip,
       renderTemplate("sections/home/value.html"),
-      renderTemplate("sections/home/platforms.html"),
       renderTemplate("sections/home/usecases.html"),
+      renderTemplate("sections/home/cta.html"),
     ],
     scripts: dHomepageScripts,
   });
@@ -561,6 +591,17 @@ ${distRenderScripts(scripts)}
   });
 
   distRenderPage({
+    outputFile: "brand-guide.html",
+    title: "Brand Guide — Ground",
+    description: "The reference layer for how Ground should look, move, and read: logo, color, typography, grid, motion, and voice.",
+    styleEntries: ["page-base.css", "sections/brand-guide.css"],
+    bundleName: "brand-guide",
+    canonicalPath: "brand-guide.html",
+    sections: [renderTemplate("sections/brand-guide/main.html")],
+    scripts: [dCommon],
+  });
+
+  distRenderPage({
     outputFile: "privacy.html",
     title: "Privacy Policy — Ground",
     description: "Ground Inc. Privacy Policy. Learn how we collect, use, and protect your personal information.",
@@ -594,6 +635,10 @@ ${distRenderScripts(scripts)}
   <script>if(sessionStorage.getItem("gnd_auth"))location.replace("index.html");</script>
   <title>Ground — Private Preview</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSans-300.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSans.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexMono-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexMono-500.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSerif-400.woff2" crossorigin>
   <link rel="stylesheet" href="css/${gateBundledCss}">
 </head>

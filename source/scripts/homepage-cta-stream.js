@@ -2,6 +2,12 @@
   const homepage = window.GroundHomepage;
   if (!homepage) return;
 
+  function readCssRgbTriplet(name, fallback) {
+    const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    const parts = value.split(/\s+/).map(Number);
+    return parts.length === 3 && parts.every(Number.isFinite) ? parts : fallback;
+  }
+
   function initCTAStream() {
     const canvas = document.getElementById("usecaseCTAGrid");
     if (!canvas) return;
@@ -10,10 +16,11 @@
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Card background: #21332e = rgb(33,51,46)
-    const BG     = "rgb(33,51,46)";
-    const C_REST = [37, 57, 50];
-    const C_LIT  = [56, 92, 73];
+    const bgRgb = readCssRgbTriplet("--ink-rgb", [25, 33, 29]);
+    const BG = `rgb(${bgRgb.join(",")})`;
+    const C_REST   = readCssRgbTriplet("--dark-surface-rgb", [37, 57, 50]);
+    const C_LIT    = readCssRgbTriplet("--signal-mid-rgb", [115, 190, 142]);
+    const C_SHADOW = [8, 12, 10]; // near-black — darker than BG for full-dark cells
 
     // Match the site background grid cell size exactly
     const CELL = 32;
@@ -138,7 +145,21 @@
 
           if (alpha < 0.004) continue;
 
-          const rgb = lerpRgb(C_REST, C_LIT, s);
+          // ~8% of cells go near-black at the wave front, then decay back to green
+          const shadowHash  = (Math.abs(Math.sin(c * 171.3 + r * 89.7 + 5.3) * 43758.5453) % 1);
+          const isShadow    = shadowHash < 0.08;
+
+          let rgb;
+          if (isShadow) {
+            const DECAY_MS   = 1400;
+            const sinceReveal = revealElapsed - SHIMMER_FADE;
+            const decayT     = sinceReveal > 0 ? Math.min(sinceReveal / DECAY_MS, 1) : 0;
+            const shadowBlend = (1 - decayT) * (1 - decayT); // ease out: 1→0
+            const normalRgb  = lerpRgb(C_REST, C_LIT, s);
+            rgb = lerpRgb(normalRgb, C_SHADOW, shadowBlend);
+          } else {
+            rgb = lerpRgb(C_REST, C_LIT, s);
+          }
           ctx.fillStyle = `rgba(${rgb[0]},${rgb[1]},${rgb[2]},${alpha.toFixed(3)})`;
           ctx.fillRect(x, y, CELL - 1, CELL - 1);
         }

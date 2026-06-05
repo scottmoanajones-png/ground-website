@@ -2,10 +2,17 @@
   const navToggle = document.querySelector(".nav-toggle");
   const navMobile = document.querySelector(".nav-mobile");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const rootStyles = getComputedStyle(document.documentElement);
+
+  function readCssRgbTriplet(name, fallback) {
+    const value = rootStyles.getPropertyValue(name).trim();
+    const parts = value.split(/\s+/).map(Number);
+    return parts.length === 3 && parts.every(Number.isFinite) ? parts : fallback;
+  }
 
   if (navToggle && navMobile) {
-    const BG_COLOR = "rgba(26,42,37,0.98)";
     let cancelShimmer = null;
+    let cancelMobileShimmer = null;
 
     function navLinks() {
       return [...navMobile.querySelectorAll(".nav-mobile-links a, .nav-mobile-cta")];
@@ -33,7 +40,7 @@
       const WAVE = 10;
       const JITTER = 8;
       const FADE = 70;
-      const [r, g, b] = [26, 42, 37];
+      const [r, g, b] = readCssRgbTriplet("--paper-rgb", [236, 241, 240]);
 
       const canvas = document.createElement("canvas");
       canvas.className = "nav-overlay-canvas";
@@ -85,7 +92,6 @@
         if (allDone) {
           setTimeout(() => {
             if (cancelled) return;
-            container.style.background = BG_COLOR;
             canvas.remove();
           }, 40);
         } else {
@@ -97,9 +103,52 @@
       return () => { cancelled = true; cancelAnimationFrame(rafId); canvas.remove(); };
     }
 
+    function initMobileShimmer() {
+      if (cancelMobileShimmer) { cancelMobileShimmer(); cancelMobileShimmer = null; }
+      const canvas = navMobile.querySelector(".nav-shimmer-canvas");
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const CELL = 32, WAVE_MS = 3500, PAUSE_MS = 5000, cycle = WAVE_MS + PAUSE_MS;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width, h = rect.height;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      let cancelled = false;
+      const start = performance.now();
+      let rafId;
+
+      function frame(now) {
+        if (cancelled) return;
+        ctx.clearRect(0, 0, w, h);
+        const elapsed = (now - start) % cycle;
+        if (elapsed < WAVE_MS) {
+          const cols = Math.ceil(w / CELL), rows = Math.ceil(h / CELL);
+          const waveX = (elapsed / WAVE_MS) * (cols + 4) - 2;
+          for (let col = 0; col < cols; col++) {
+            for (let row = 0; row < rows; row++) {
+              const waveDist = Math.abs(col + row * 0.4 - waveX);
+              const alpha = Math.max(0, 0.11 - waveDist * 0.038);
+              if (alpha > 0.003) {
+                ctx.fillStyle = "rgba(255,255,255," + alpha.toFixed(3) + ")";
+                ctx.fillRect(col * CELL + 0.5, row * CELL + 0.5, CELL - 1, CELL - 1);
+              }
+            }
+          }
+        }
+        rafId = requestAnimationFrame(frame);
+      }
+
+      rafId = requestAnimationFrame(frame);
+      cancelMobileShimmer = () => { cancelled = true; cancelAnimationFrame(rafId); };
+    }
+
     function openNav() {
       resetLinks();
-      navMobile.style.background = "";
       navMobile.querySelectorAll(".nav-overlay-canvas").forEach((c) => c.remove());
       navMobile.style.display = "flex";
       navMobile.setAttribute("aria-hidden", "false");
@@ -107,17 +156,18 @@
       navToggle.setAttribute("aria-label", "Close menu");
 
       if (reduceMotion) {
-        navMobile.style.background = BG_COLOR;
         staggerLinks();
         return;
       }
 
+      if (!reduceMotion) initMobileShimmer();
       if (cancelShimmer) cancelShimmer();
       cancelShimmer = runShimmer(navMobile, staggerLinks);
     }
 
     function closeNav() {
       if (cancelShimmer) { cancelShimmer(); cancelShimmer = null; }
+      if (cancelMobileShimmer) { cancelMobileShimmer(); cancelMobileShimmer = null; }
       navToggle.setAttribute("aria-expanded", "false");
       navToggle.setAttribute("aria-label", "Open menu");
       navMobile.setAttribute("aria-hidden", "true");
@@ -128,7 +178,6 @@
         navMobile.style.display = "none";
         navMobile.style.opacity = "";
         navMobile.style.transition = "";
-        navMobile.style.background = "";
         navMobile.querySelectorAll(".nav-overlay-canvas").forEach((c) => c.remove());
         resetLinks();
       }, 200);

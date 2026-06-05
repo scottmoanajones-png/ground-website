@@ -3,8 +3,15 @@
         <div class="proof-head" data-reveal>
           <span class="proof-tag" id="proof-title">Backed by</span>
         </div>
-        <div class="proof-row" aria-label="Ground investors">
-          {{BACKERS_PROOF_ITEMS}}
+      </div>
+      <div class="proof-marquee-track">
+        <div class="proof-marquee" aria-label="Ground investors">
+          <div class="proof-marquee-group">
+            {{BACKERS_PROOF_ITEMS}}
+          </div>
+          <div class="proof-marquee-group" aria-hidden="true">
+            {{BACKERS_PROOF_ITEMS_DUP}}
+          </div>
         </div>
       </div>
     </section>

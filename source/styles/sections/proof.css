@@ -1,10 +1,11 @@
 .proof-strip {
-  background: #21332e;
+  background: var(--hero-dark);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  overflow: hidden;
 }
 
 .proof-shell {
-  padding: 40px 0 44px;
+  padding: 40px 0 20px;
   display: grid;
   gap: 24px;
 }
@@ -25,12 +26,92 @@
   color: rgba(255, 255, 255, 0.52);
 }
 
-.proof-row {
+/* Marquee track — full strip width, fades at both edges */
+.proof-marquee-track {
+  position: relative;
+  padding-bottom: 40px;
+}
+
+.proof-marquee-track::before,
+.proof-marquee-track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 80px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.proof-marquee-track::before {
+  left: 0;
+  background: linear-gradient(to right, var(--hero-dark), transparent);
+}
+
+.proof-marquee-track::after {
+  right: 0;
+  background: linear-gradient(to left, var(--hero-dark), transparent);
+}
+
+/* Static layout at larger sizes — centered, wrapping */
+.proof-marquee {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
-  gap: 40px 64px;
+  justify-content: center;
   align-items: center;
+  gap: 24px 64px;
+  width: auto;
+  padding: 0 24px;
+}
+
+.proof-marquee-group {
+  display: flex;
+  align-items: center;
+  gap: 0 64px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* Hide duplicate group and fades at sizes where logos fit */
+.proof-marquee-group + .proof-marquee-group,
+.proof-marquee-track::before,
+.proof-marquee-track::after {
+  display: none;
+}
+
+/* Marquee kicks in when logos can't comfortably sit in one row */
+@media (max-width: 900px) {
+  .proof-marquee {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: max-content;
+    gap: 0;
+    padding: 0;
+    animation: proof-scroll 28s linear infinite;
+  }
+
+  .proof-marquee:hover {
+    animation-play-state: paused;
+  }
+
+  .proof-marquee-group {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0 72px;
+    flex-shrink: 0;
+    padding: 0 36px;
+  }
+
+  .proof-marquee-group + .proof-marquee-group,
+  .proof-marquee-track::before,
+  .proof-marquee-track::after {
+    display: flex;
+  }
+
+  .proof-marquee-track::before,
+  .proof-marquee-track::after {
+    display: block;
+  }
 }
 
 .proof-chip {
@@ -42,25 +123,39 @@
 
 .proof-chip img {
   display: block;
-  max-width: clamp(112px, calc(56px + 8.6vw), 180px);
-  max-height: clamp(54px, calc(26px + 4.5vw), 90px);
+  max-width: 110px;
+  max-height: 44px;
   width: auto;
   height: auto;
   object-fit: contain;
-  opacity: 0.8;
+  opacity: 0.72;
   transition: opacity 280ms ease;
 }
 
-.proof-chip:hover img {
+a.proof-chip:hover img {
   opacity: 1;
 }
 
-@media (max-width: 820px) {
-  .proof-row {
-    gap: 24px 36px;
+@keyframes proof-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .proof-marquee {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto;
+    gap: 24px 48px;
+  }
+
+  .proof-marquee-group + .proof-marquee-group {
+    display: none;
   }
 }
 
+/* Light variant (used on about page) */
 .proof-strip--light {
   background: var(--paper-soft);
   border-bottom: 1px solid var(--ink-rule);
@@ -71,16 +166,18 @@
   color: var(--ink-faint);
 }
 
+.proof-strip--light .proof-marquee-track::before {
+  background: linear-gradient(to right, var(--paper-soft), transparent);
+}
+
+.proof-strip--light .proof-marquee-track::after {
+  background: linear-gradient(to left, var(--paper-soft), transparent);
+}
+
 .proof-strip--light .proof-chip img {
   opacity: 0.6;
 }
 
-.proof-strip--light .proof-chip:hover img {
+.proof-strip--light a.proof-chip:hover img {
   opacity: 0.9;
-}
-
-@media (max-width: 640px) {
-  .proof-shell {
-    gap: 24px;
-  }
 }

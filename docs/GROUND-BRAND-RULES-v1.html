@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ground — Brand Rules</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Serif:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:       #ecf1f0;
+    --paper-soft:  #f2f6f5;
+    --paper-strong:#e3eae8;
+    --ink:         #19211d;
+    --ink-mid:     #5a625f;
+    --ink-faint:   #8b918e;
+    --yield:       #0b8a4d;
+    --yield-bright:#2ea866;
+    --yield-soft:  #e6f3ec;
+    --hero-dark:   #19211d;
+    --dark-surface:#253932;
+    --rule:        #d1d9d8;
+    --signal-deep: #4bc380;
+    --signal-mid:  #73be8e;
+    --signal-bright:#91e1ac;
+    --glow-soft:   #bae6cd;
+    --success:     #16693a;
+    --warning:     #b88219;
+    --error:       #b23a34;
+    --info:        #2f628f;
+    --mono: "IBM Plex Mono", monospace;
+    --sans: "IBM Plex Sans", sans-serif;
+    --serif: "IBM Plex Serif", serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; scroll-behavior: smooth; }
+
+  body {
+    background: linear-gradient(180deg, var(--paper-soft) 0%, var(--paper) 100%);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 400;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Layout ── */
+  .wrap {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: 100vh;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── Sidebar ── */
+  aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 48px 24px 48px 0;
+    border-right: 1px solid var(--rule);
+  }
+
+  .aside-logo {
+    display: block;
+    margin-bottom: 40px;
+  }
+
+  .aside-logo svg {
+    height: 20px;
+    width: auto;
+    display: block;
+  }
+
+  nav a {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--ink-mid);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    padding: 5px 0;
+    border-left: 2px solid transparent;
+    padding-left: 12px;
+    margin-left: -12px;
+    transition: color 0.15s, border-color 0.15s;
+  }
+
+  nav a:hover { color: var(--ink); border-left-color: var(--yield); }
+
+  nav .nav-section {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-top: 28px;
+    margin-bottom: 6px;
+  }
+
+  /* ── Main ── */
+  main {
+    padding: 48px 0 120px 64px;
+    max-width: 680px;
+  }
+
+  /* ── Doc Header ── */
+  .doc-header {
+    margin-bottom: 64px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .doc-eyebrow {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--yield);
+    margin-bottom: 16px;
+  }
+
+  .doc-title {
+    font-family: var(--serif);
+    font-size: 36px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+
+  .doc-sub {
+    font-size: 15px;
+    color: var(--ink-mid);
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  .doc-meta {
+    margin-top: 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Sections ── */
+  section {
+    margin-bottom: 64px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  section:last-child { border-bottom: none; }
+
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--ink-faint);
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 20px;
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-top: 32px;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 15px;
+    color: var(--ink);
+    line-height: 1.75;
+    margin-bottom: 14px;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  /* ── Callout ── */
+  .callout {
+    background: var(--yield-soft);
+    border-left: 3px solid var(--yield);
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 0 4px 4px 0;
+  }
+
+  .callout p {
+    font-size: 14px;
+    color: var(--hero-dark);
+    margin: 0;
+    line-height: 1.65;
+  }
+
+  .callout strong {
+    font-weight: 500;
+    color: var(--yield);
+  }
+
+  /* ── Rule table ── */
+  .rule-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .rule-col {
+    padding: 20px 24px;
+  }
+
+  .rule-col:first-child {
+    border-right: 1px solid var(--rule);
+  }
+
+  .rule-col-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .rule-col:first-child .rule-col-label { color: var(--yield); }
+  .rule-col:last-child .rule-col-label { color: var(--error); }
+
+  .rule-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .rule-col li {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .rule-col li:last-child { border-bottom: none; }
+
+  .rule-col:first-child li::before {
+    content: "✓";
+    color: var(--yield);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .rule-col:last-child li::before {
+    content: "✕";
+    color: var(--error);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* ── Spec rows ── */
+  .spec-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0;
+  }
+
+  .spec-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+  }
+
+  .spec-list li:last-child { border-bottom: none; }
+
+  .spec-key {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-mid);
+    min-width: 140px;
+    flex-shrink: 0;
+  }
+
+  .spec-val {
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* ── Color swatches ── */
+  .swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .swatch-block {
+    width: 80px;
+    height: 56px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .swatch-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+  }
+
+  .swatch-hex {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-faint);
+  }
+
+  /* ── Grid diagram ── */
+  .grid-diagram {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .grid-diagram-header {
+    background: var(--dark-surface);
+    padding: 12px 20px;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .grid-diagram-body {
+    display: grid;
+    grid-template-columns: 1fr 40px 1fr;
+    background: var(--paper);
+  }
+
+  .grid-state {
+    padding: 24px;
+  }
+
+  .grid-state-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    margin-bottom: 12px;
+  }
+
+  .grid-canvas {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--dark-surface);
+  }
+
+  .grid-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    border-left: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+  }
+
+  .grid-desc {
+    font-size: 12px;
+    color: var(--ink-mid);
+    line-height: 1.65;
+    margin-top: 10px;
+  }
+
+  /* ── Inline canvas renderers for the diagram ── */
+  canvas.mini { width: 100%; height: 100%; display: block; }
+
+  /* ── Type specimens ── */
+  .type-specimen {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .type-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    border-bottom: 1px solid var(--rule);
+    min-height: 64px;
+  }
+
+  .type-row:last-child { border-bottom: none; }
+
+  .type-meta {
+    padding: 16px;
+    border-right: 1px solid var(--rule);
+    background: var(--paper);
+  }
+
+  .type-meta-name {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-mid);
+    letter-spacing: 0.06em;
+    line-height: 1.5;
+  }
+
+  .type-sample {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  /* ── Locked badge ── */
+  .locked {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: var(--dark-surface);
+    color: rgba(255,255,255,0.8);
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-left: 10px;
+    vertical-align: middle;
+  }
+
+  .locked::before {
+    content: "⏚";
+    font-size: 10px;
+    opacity: 0.7;
+  }
+
+  /* ── Scenes ── */
+  .scene-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .scene-card {
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  .scene-name {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--yield);
+    margin-bottom: 6px;
+  }
+
+  .scene-desc {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  /* ── Copy anchors ── */
+  .copy-block {
+    background: var(--hero-dark);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin: 12px 0;
+  }
+
+  .copy-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 8px;
+  }
+
+  .copy-text {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.5;
+    font-weight: 400;
+  }
+
+  /* ── Stats ── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .stat {
+    background: var(--paper);
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+    line-height: 1.4;
+  }
+
+  /* ── Backers ── */
+  .backers {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-mid);
+    letter-spacing: 0.04em;
+    line-height: 2;
+  }
+
+  /* ── Prototype ref ── */
+  .file-ref {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    margin: 12px 0;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s;
+  }
+
+  .file-ref:hover { border-color: var(--yield); }
+
+  .file-ref-icon {
+    font-size: 20px;
+    opacity: 0.4;
+  }
+
+  .file-ref-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .file-ref-desc {
+    font-size: 12px;
+    color: var(--ink-mid);
+  }
+
+  /* ── Pillars ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+  }
+
+  .pillar {
+    background: var(--paper);
+    padding: 20px;
+  }
+
+  .pillar-name {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--yield);
+    margin-bottom: 8px;
+  }
+
+  .pillar-desc {
+    font-size: 13px;
+    color: var(--ink-mid);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 800px) {
+    .wrap { grid-template-columns: 1fr; }
+    aside { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--rule); padding: 32px 24px; }
+    main { padding: 40px 24px 80px; }
+    .rule-grid { grid-template-columns: 1fr; }
+    .rule-col:first-child { border-right: none; border-bottom: 1px solid var(--rule); }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .scene-grid { grid-template-columns: 1fr; }
+    .pillars { grid-template-columns: 1fr; }
+    .grid-diagram-body { grid-template-columns: 1fr; }
+    .grid-divider { border: none; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ── Sidebar ── -->
+  <aside>
+    <div class="aside-logo">
+      <svg viewBox="0 0 1151 240" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Ground">
+        <path d="M431 96H335V168H407V144H359V120H431V192H311V72H431V96ZM575 144H527V168H575V192H503V120H551V96H479V192H455V72H575V144ZM719 192H599V72H719V192ZM767 168H839V72H863V192H743V72H767V168ZM1007 192H983V96H911V192H887V72H1007V192ZM1151 192H1031V120H1055V168H1127V96H1031V72H1151V192ZM623 168H695V96H623V168Z" fill="black"/>
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M240 240H0V0H240V240ZM96 168V192H144V168H96ZM72 144H168V120H72V144ZM48 96H192V72H48V96Z" fill="black"/>
+      </svg>
+    </div>
+
+    <nav>
+      <div class="nav-section">Foundation</div>
+      <a href="#what">What Ground is</a>
+      <a href="#metaphor">Core metaphor</a>
+      <a href="#pillars">Brand pillars</a>
+
+      <div class="nav-section">Visual</div>
+      <a href="#direction">Visual direction</a>
+      <a href="#grid">The grid system</a>
+      <a href="#color">Color</a>
+      <a href="#type">Typography</a>
+      <a href="#logo">Logo</a>
+
+      <div class="nav-section">Voice</div>
+      <a href="#tone">Tone of voice</a>
+      <a href="#copy">Copy anchors</a>
+
+      <div class="nav-section">Rules</div>
+      <a href="#dodont">Do / Don't</a>
+      <a href="#refs">Reference brands</a>
+      <a href="#prototype">Prototype files</a>
+    </nav>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <div class="doc-header">
+      <div class="doc-eyebrow">Brand Rules — Working Document</div>
+      <h1 class="doc-title">Ground<br>Brand Rules</h1>
+      <p class="doc-sub">Rules and constraints for anyone building with or for the Ground brand — designer, developer, or AI collaborator. Updated to reflect the locked v1 palette, unified animation color family, and role-based type system.</p>
+      <div class="doc-meta">Last updated: May 28, 2026 &nbsp;·&nbsp; Official v1 palette locked &nbsp;·&nbsp; v1.0</div>
+    </div>
+
+
+    <!-- 01 WHAT GROUND IS -->
+    <section id="what">
+      <div class="section-num">01</div>
+      <h2>What Ground is</h2>
+
+      <p>Ground is the money infrastructure company. Its API connects any stablecoin or cash balance on a financial platform to the full on-chain yield grid — 24+ sources, noncustodial, institutional-grade. Integration is measured in days.</p>
+
+      <p>The ambition: be to on-chain yield what Stripe is to payment processing. The default, invisible, trusted layer that serious financial platforms rely on.</p>
+
+      <h3>Audience</h3>
+      <p>Strictly B2B. Four decision-makers must each feel understood at every touchpoint:</p>
+
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">CEO / Founder</span>
+          <span class="spec-val">Strategic fit, category leadership, investor credibility</span>
+        </li>
+        <li>
+          <span class="spec-key">CFO / CIO</span>
+          <span class="spec-val">Financial authority, risk posture, yield numbers</span>
+        </li>
+        <li>
+          <span class="spec-key">General Manager</span>
+          <span class="spec-val">Implementation path, integration simplicity</span>
+        </li>
+        <li>
+          <span class="spec-key">Senior Engineer</span>
+          <span class="spec-val">API quality, noncustodial architecture, uptime</span>
+        </li>
+      </ul>
+
+      <h3>Primary verticals</h3>
+      <p>Neobanks · Fintechs · Centralized and decentralized exchanges · Custodians · Wallets · Corporate treasuries</p>
+
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-val">5.23%</div>
+          <div class="stat-label">7-day yield APY</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">$2.4B</div>
+          <div class="stat-label">Volume processed</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">99.9%</div>
+          <div class="stat-label">Uptime SLA</div>
+        </div>
+        <div class="stat">
+          <div class="stat-val">24+</div>
+          <div class="stat-label">Yield sources</div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 02 CORE METAPHOR -->
+    <section id="metaphor">
+      <div class="section-num">02</div>
+      <h2>Core metaphor <span class="locked">Locked Apr 30 2026</span></h2>
+
+      <p>In electronics, <em>ground</em> is the stable reference layer every circuit must connect to. A floating voltage source has potential but no reference point — it can't be measured, can't deliver current, can't do work. The moment you connect it to ground, the reference is established. Current flows. The energy was always there. Ground is what lets it act.</p>
+
+      <div class="callout">
+        <p><strong>Floating</strong> — Idle capital. No reference. Potential is theoretical. Yield is zero.<br>
+        <strong>Grounded</strong> — Connected. Reference established. Circuit complete. Yield is live.</p>
+      </div>
+
+      <p>This maps directly to the product. Idle stablecoin and cash balances are floating — they have potential but no reference. Connecting to Ground establishes the reference. Every yield source on the on-chain grid becomes accessible.</p>
+
+      <p><strong>The name IS the metaphor.</strong> The logo (three tapered bars, 3:2:1 ratio) is the electrical ground symbol ⏚. Already inscribed. This metaphor generates copy naturally — plug in, floating, current, the grid, live, circuit complete — and reads in 3 seconds to a CFO with no prior crypto knowledge.</p>
+
+      <h3>Vocabulary it unlocks</h3>
+      <p>grounded · floating · connected · live · the grid · current · reference · circuit complete · on-chain · activate · plug in</p>
+
+      <h3>Vocabulary it replaces</h3>
+      <p><del>supercharges</del> → connects, grounds, activates<br>
+      The previous verb implied adding energy from outside. Ground's product unleashes potential that was already there.</p>
+    </section>
+
+
+    <!-- 03 PILLARS -->
+    <section id="pillars">
+      <div class="section-num">03</div>
+      <h2>Brand pillars</h2>
+
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-name">Credible</div>
+          <div class="pillar-desc">Authority and expertise. Punches above its weight. Serious infrastructure for serious institutions.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-name">Elegant</div>
+          <div class="pillar-desc">Conservative accents on a strong foundation. The F1 car — complex machine, easy to read.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-name">Assured</div>
+          <div class="pillar-desc">Buttoned up but lowkey. Speaks with conviction. Doesn't beg. Quiet confidence underlaid with competence.</div>
+        </div>
+      </div>
+
+      <h3>First 5 seconds</h3>
+      <p><strong>Should feel:</strong> Serious. Technically competent. Like a company that has already solved the hard problems. Quietly impressive — the kind of credibility that doesn't need to announce itself.</p>
+      <p><strong>Should not feel:</strong> Crypto-forward or speculative. Consumer or lifestyle. Loud, over-designed, or startup-y.</p>
+    </section>
+
+
+    <!-- 04 VISUAL DIRECTION -->
+    <section id="direction">
+      <div class="section-num">04</div>
+      <h2>Visual direction <span class="locked">Locked May 7 2026</span></h2>
+
+      <p>After client alignment on May 7, 2026: the grid is the infrastructure play, and the top-down to isometric perspective shift is the brand's core visual move.</p>
+
+      <div class="callout">
+        <p><strong>The idea in one sentence:</strong> Imagery is built from grids. The viewer sees this imagery either top-down or isometric. Shifting perspective reveals new angles and new meaning — the same underlying infrastructure, suddenly made tangible.</p>
+      </div>
+
+      <h3>What it means</h3>
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Top-down</span>
+          <span class="spec-val">Infrastructure seen from above. A schematic. A plan. Precision and control. The "map view" — familiar, legible, authoritative.</span>
+        </li>
+        <li>
+          <span class="spec-key">Isometric</span>
+          <span class="spec-val">Infrastructure made visible and tangible. Depth and volume revealed. The same grid, now with height — blocks rise to show activity, yield, growth.</span>
+        </li>
+        <li>
+          <span class="spec-key">The shift</span>
+          <span class="spec-val">Moving between views is Ground's signature moment. The camera lift that reveals what was always there. Same infrastructure, new perspective, new meaning.</span>
+        </li>
+      </ul>
+
+      <h3>What came before (retired)</h3>
+      <p>Cymatics / Flatlands (Edwin Abbott) was the previous visual direction. Retired April 30, 2026. Visually sophisticated but required explanation, disconnected from the name, didn't generate copy naturally. Do not reference or revive it.</p>
+    </section>
+
+
+    <!-- 05 GRID SYSTEM -->
+    <section id="grid">
+      <div class="section-num">05</div>
+      <h2>The grid system</h2>
+
+      <p>The grid is not decoration. It is the fundamental visual unit of the brand — it represents infrastructure literally and metaphorically. Every canvas, illustration, and data visualization is built on the grid.</p>
+
+      <h3>Construction rules</h3>
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Start top-down</span>
+          <span class="spec-val">Every canvas defaults to the plan view. Top-down is the base state — infrastructure as schematic.</span>
+        </li>
+        <li>
+          <span class="spec-key">Reveal isometric</span>
+          <span class="spec-val">Isometric is the transition, the reveal, the "aha." It shows volume and meaning, not just structure.</span>
+        </li>
+        <li>
+          <span class="spec-key">Grid lines</span>
+          <span class="spec-val">Thin, structural, quiet. Never heavy. Never decorative. The grid should feel like engineering drawing paper, not graph paper wallpaper.</span>
+        </li>
+        <li>
+          <span class="spec-key">Cube faces</span>
+          <span class="spec-val">Top face: lightest (lit). Left face: mid-tone. Right face: darkest (shadow). Consistent light source — upper-left.</span>
+        </li>
+        <li>
+          <span class="spec-key">Height = meaning</span>
+          <span class="spec-val">Block height encodes data — yield value, activity level, connectivity. Taller = more. Empty grid = floating/idle.</span>
+        </li>
+        <li>
+          <span class="spec-key">Signal range = active</span>
+          <span class="spec-val">Renderer activity lives in the shared signal family: Signal Deep, Signal Mid, Signal Bright, and Glow Soft. Brand green remains the primary interface accent; the signal range is for motion, depth, and active grid behavior.</span>
+        </li>
+        <li>
+          <span class="spec-key">Projection angle</span>
+          <span class="spec-val">Standard isometric: 30° from horizontal. X/Y/Z ratios consistent across all scenes. Do not freehand the angle.</span>
+        </li>
+      </ul>
+
+      <h3>Named scenes</h3>
+      <div class="scene-grid">
+        <div class="scene-card">
+          <div class="scene-name">Defrag</div>
+          <div class="scene-desc">Scattered blocks assemble into ordered structure. Chaos → order. Floating → grounded.</div>
+        </div>
+        <div class="scene-card">
+          <div class="scene-name">Crystal</div>
+          <div class="scene-desc">Growth from a seed point outward. A single green cube propagates. Yield activating.</div>
+        </div>
+        <div class="scene-card">
+          <div class="scene-name">Route</div>
+          <div class="scene-desc">A path traces across the grid — green lighting up as the circuit connects. Current flowing.</div>
+        </div>
+        <div class="scene-card">
+          <div class="scene-name">Terrain</div>
+          <div class="scene-desc">A yield landscape — block heights encode yield values across sources. The full grid at work.</div>
+        </div>
+      </div>
+
+      <h3>Do not</h3>
+      <p>Don't use the grid as wallpaper or backdrop texture. Don't animate it gratuitously. Every grid canvas should earn its place — it should tell something about the product or represent something real about infrastructure, yield, or connectivity.</p>
+    </section>
+
+
+    <!-- 06 COLOR -->
+    <section id="color">
+      <div class="section-num">06</div>
+      <h2>Color</h2>
+
+      <p>The palette is now cooler, more clinical, and more precise. One shared animation family. One small semantic status set. No separate scene-specific palettes.</p>
+
+      <div class="swatches">
+        <div class="swatch">
+          <div class="swatch-block" style="background:#ecf1f0;"></div>
+          <div class="swatch-name">--paper</div>
+          <div class="swatch-hex">#ecf1f0</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#f2f6f5;"></div>
+          <div class="swatch-name">--paper-soft</div>
+          <div class="swatch-hex">#f2f6f5</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#e3eae8;"></div>
+          <div class="swatch-name">--paper-strong</div>
+          <div class="swatch-hex">#e3eae8</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#19211d;"></div>
+          <div class="swatch-name">--ink</div>
+          <div class="swatch-hex">#19211d</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#253932;"></div>
+          <div class="swatch-name">--dark-surface</div>
+          <div class="swatch-hex">#253932</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#5a625f;"></div>
+          <div class="swatch-name">--text-secondary</div>
+          <div class="swatch-hex">#5a625f</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#8b918e;"></div>
+          <div class="swatch-name">--text-tertiary</div>
+          <div class="swatch-hex">#8b918e</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#d1d9d8;"></div>
+          <div class="swatch-name">--border-subtle</div>
+          <div class="swatch-hex">#d1d9d8</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#0b8a4d;"></div>
+          <div class="swatch-name">--yield</div>
+          <div class="swatch-hex">#0b8a4d</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#2ea866;"></div>
+          <div class="swatch-name">--yield-bright</div>
+          <div class="swatch-hex">#2ea866</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#4bc380;"></div>
+          <div class="swatch-name">--signal-deep</div>
+          <div class="swatch-hex">#4bc380</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#73be8e;"></div>
+          <div class="swatch-name">--signal-mid</div>
+          <div class="swatch-hex">#73be8e</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#91e1ac;"></div>
+          <div class="swatch-name">--signal-bright</div>
+          <div class="swatch-hex">#91e1ac</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#bae6cd;"></div>
+          <div class="swatch-name">--glow-soft</div>
+          <div class="swatch-hex">#bae6cd</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#16693a;"></div>
+          <div class="swatch-name">--success</div>
+          <div class="swatch-hex">#16693a</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#b88219;"></div>
+          <div class="swatch-name">--warning</div>
+          <div class="swatch-hex">#b88219</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#b23a34;"></div>
+          <div class="swatch-name">--error</div>
+          <div class="swatch-hex">#b23a34</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-block" style="background:#2f628f;"></div>
+          <div class="swatch-name">--info</div>
+          <div class="swatch-hex">#2f628f</div>
+        </div>
+      </div>
+
+      <h3>Usage rules</h3>
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Paper ramp</span>
+          <span class="spec-val">Paper, Paper Soft, and Paper Strong are the default light surfaces. They should feel cooler and more infrastructural than parchment or notebook stock.</span>
+        </li>
+        <li>
+          <span class="spec-key">Ink / Hero Dark</span>
+          <span class="spec-val">Ink is the primitive dark base. Hero Dark is now a semantic alias, not a separate color. Dark Surface is the next tonal step for occupied cells, panels, and layered dark UI.</span>
+        </li>
+        <li>
+          <span class="spec-key">Brand green</span>
+          <span class="spec-val">Yield and Yield Bright are still the primary brand accents: links, CTA emphasis, selected interface moments, and restrained headline highlights. One green thing at a time.</span>
+        </li>
+        <li>
+          <span class="spec-key">Animation palette</span>
+          <span class="spec-val">All renderer scenes share one signal family: Signal Deep, Signal Mid, Signal Bright, and Glow Soft. Do not recreate separate about/platform/stream palettes.</span>
+        </li>
+        <li>
+          <span class="spec-key">Semantic status</span>
+          <span class="spec-val">Success, Warning, Error, and Info are official operational colors. They are for product and system state, not for general marketing decoration.</span>
+        </li>
+      </ul>
+
+      <h3>What is prohibited</h3>
+      <p>No neon. No rainbow palette drift. No inventing new scene-specific colors when the shared system already covers the job. No gradient text. No using semantic status hues as casual accents. Dark remains a deliberate section or surface choice, not the brand's resting state.</p>
+    </section>
+
+
+    <!-- 07 TYPOGRAPHY -->
+    <section id="type">
+      <div class="section-num">07</div>
+      <h2>Typography</h2>
+
+      <p>One family: IBM Plex. Three variants. This is non-negotiable — the brand does not mix in display fonts, system fonts, or novelty typefaces. The system is now role-based: 21px for reading, 16px for compact UI/legal, and the rest of the scale as named display steps.</p>
+
+      <div class="type-specimen">
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-meta-name">IBM Plex Serif<br>400 only<br>Hero, section, title</div>
+          </div>
+          <div class="type-sample">
+            <span style="font-family:'IBM Plex Serif',serif; font-weight:400; font-size:42px; color:var(--ink); line-height:1.02; letter-spacing:-0.04em">Embedded yield.<br>Built to be read.</span>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-meta-name">IBM Plex Sans<br>400 · 500<br>Reading, support, UI</div>
+          </div>
+          <div class="type-sample">
+            <span style="font-family:'IBM Plex Sans',sans-serif; font-weight:400; font-size:21px; color:var(--ink); line-height:1.62">Any stablecoin or cash balance on your platform already carries potential yield. Ground connects it to the full on-chain yield grid.</span>
+          </div>
+        </div>
+        <div class="type-row">
+          <div class="type-meta">
+            <div class="type-meta-name">IBM Plex Mono<br>400 · 500<br>Labels, chips, metadata</div>
+          </div>
+          <div class="type-sample">
+            <span style="font-family:'IBM Plex Mono',monospace; font-weight:500; font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--ink-mid)">Consumer Platforms · Exchanges · Custodians</span>
+          </div>
+        </div>
+      </div>
+
+      <h3>Hard rules</h3>
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Loaded weights</span>
+          <span class="spec-val">Serif 400 only. Sans 400 and 500. Mono 400 and 500. Do not introduce heavier weights or extra cuts without an intentional system revision.</span>
+        </li>
+        <li>
+          <span class="spec-key">Official type set</span>
+          <span class="spec-val">12 / 16 / 21 / 28 / 37 / 50 / 67 / 89 / 118. Name by role, not by HTML tag: Label XS, UI Base, Reading Base, Title S, Title M, Section, Hero, Display XL, Display XXL.</span>
+        </li>
+        <li>
+          <span class="spec-key">Reading base</span>
+          <span class="spec-val">21px is the default prose size. Ground is a reading-first website, so body copy should feel generous, deliberate, and confident.</span>
+        </li>
+        <li>
+          <span class="spec-key">UI base</span>
+          <span class="spec-val">16px is the compact UI/legal base. Use it for forms, nav, utility text, and places where 21px would feel bloated.</span>
+        </li>
+        <li>
+          <span class="spec-key">Serif role</span>
+          <span class="spec-val">Hero display, section headings, card titles, and editorial emphasis. Not for body copy.</span>
+        </li>
+        <li>
+          <span class="spec-key">Sans role</span>
+          <span class="spec-val">All running body copy, reading-first paragraphs, support copy, forms, and dense interface text.</span>
+        </li>
+        <li>
+          <span class="spec-key">Mono role</span>
+          <span class="spec-val">Section eyebrows, nav, button labels, tags, chips, metadata, code references, and compact operational labels. Usually uppercase with tracking.</span>
+        </li>
+        <li>
+          <span class="spec-key">Semantic tags</span>
+          <span class="spec-val">Do not tie `h1`/`h2`/`h3` directly to size tokens. Use tags for document structure, then map them onto the appropriate role-based type size.</span>
+        </li>
+        <li>
+          <span class="spec-key">Gradient text</span>
+          <span class="spec-val">Never. Not even on dark backgrounds.</span>
+        </li>
+        <li>
+          <span class="spec-key">Tracking (letter-spacing)</span>
+          <span class="spec-val">Mono labels: roughly 0.08–0.18em depending on density. Eyebrow caps: 0.12–0.18em. Hero serif can run tight at around -0.04em. Do not over-track sans body copy.</span>
+        </li>
+      </ul>
+    </section>
+
+
+    <!-- 08 LOGO -->
+    <section id="logo">
+      <div class="section-num">08</div>
+      <h2>Logo</h2>
+
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Mark</span>
+          <span class="spec-val">Three tapered horizontal bars at 3:2:1 width ratio, stacked with narrowest at bottom. This IS the electrical ground symbol ⏚.</span>
+        </li>
+        <li>
+          <span class="spec-key">Wordmark</span>
+          <span class="spec-val">GROUND in IBM Plex Sans, spaced uppercase. Paired with the mark to the right.</span>
+        </li>
+        <li>
+          <span class="spec-key">Viewbox</span>
+          <span class="spec-val">1151 × 240px. The SVG source file is in Assets/Ground-Logo.svg.</span>
+        </li>
+        <li>
+          <span class="spec-key">Colors</span>
+          <span class="spec-val">On light: fill="black" (--ink). On dark: fill="white". Never color the mark in yield green or other accent colors.</span>
+        </li>
+        <li>
+          <span class="spec-key">Clear space</span>
+          <span class="spec-val">Minimum clear space = height of the shortest bar on all sides.</span>
+        </li>
+      </ul>
+
+      <h3>Never</h3>
+      <p>Distort the 3:2:1 ratio. Add drop shadows, glows, or gradients. Animate the logo mark. Use the mark without the wordmark except in very small / favicon contexts. Recolor in anything other than black or white.</p>
+
+      <h3>The 3:2:1 ratio as a compositional principle</h3>
+      <p>The bar ratio is not just the logo — it is a layout proportioning principle. Use it in grids, card ratios, and section proportions to build visual coherence across all brand surfaces.</p>
+    </section>
+
+
+    <!-- 09 TONE OF VOICE -->
+    <section id="tone">
+      <div class="section-num">09</div>
+      <h2>Tone of voice</h2>
+
+      <p>If Ground were a person at a dinner table: stoic yet ambitious, principled, buttoned up but lowkey, speaks with conviction, professional and coherent, has fun but well-behaved, aura of excitement, quiet confidence underlaid with competence.</p>
+
+      <h3>Write like this</h3>
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Declarative</span>
+          <span class="spec-val">Short, confident sentences. "Integration is measured in days." Not "our platform enables you to integrate in just days."</span>
+        </li>
+        <li>
+          <span class="spec-key">Precise</span>
+          <span class="spec-val">Specific numbers over vague superlatives. "24+ yield sources" over "dozens of integrations."</span>
+        </li>
+        <li>
+          <span class="spec-key">Mature</span>
+          <span class="spec-val">Infrastructure confidence. Not startup enthusiasm. Assume the reader is a CFO who has seen every pitch.</span>
+        </li>
+        <li>
+          <span class="spec-key">Honest</span>
+          <span class="spec-val">Don't hype. Don't promise what isn't proven. Let the stats and the product speak.</span>
+        </li>
+      </ul>
+
+      <h3>Reference brands for tone</h3>
+      <p>Column.com · Stripe · Mercury · AWS · Linear.app<br>
+      <em>Not:</em> Coinbase, Binance, any consumer DeFi brand</p>
+
+      <h3>Preferred verbs</h3>
+      <p>connects · grounds · activates · enables · produces · delivers · routes</p>
+
+      <h3>Avoid</h3>
+      <p>supercharges · unlocks · seamless · leverage · game-changing · revolutionary · best-in-class · world-class</p>
+    </section>
+
+
+    <!-- 10 COPY ANCHORS -->
+    <section id="copy">
+      <div class="section-num">10</div>
+      <h2>Copy anchors</h2>
+
+      <p>These are the locked copy units. Treat them as infrastructure — don't paraphrase or riff unless you're in an explicit copywriting session.</p>
+
+      <div class="copy-block">
+        <div class="copy-label">Company descriptor</div>
+        <div class="copy-text">The money infrastructure company.</div>
+      </div>
+
+      <div class="copy-block">
+        <div class="copy-label">Eyebrow / subhead variants</div>
+        <div class="copy-text">THE MONEY INFRASTRUCTURE COMPANY<br>NONCUSTODIAL AND INSTITUTIONAL-GRADE<br>ON-CHAIN YIELD INFRASTRUCTURE</div>
+      </div>
+
+      <div class="copy-block">
+        <div class="copy-label">Core value prop</div>
+        <div class="copy-text">Any stablecoin or cash balance on your platform already carries potential yield. Ground connects it to the full on-chain yield grid — 24+ sources, noncustodial, institutional-grade. Integration is measured in days.</div>
+      </div>
+
+      <div class="copy-block">
+        <div class="copy-label">Tagline</div>
+        <div class="copy-text">Build on solid Ground.</div>
+      </div>
+
+      <div class="copy-block">
+        <div class="copy-label">Brand statement</div>
+        <div class="copy-text">Ground is the brand that makes any financial platform feel powerful — by being the only money infrastructure company that reaches every yield source.</div>
+      </div>
+
+      <h3>Backers</h3>
+      <p class="backers">Bain Capital Crypto · ParaFi · Nascent · Robot Ventures · Chapter One</p>
+
+      <h3>Contact</h3>
+      <p style="font-family:var(--mono); font-size:13px;">clients@groundtech.co</p>
+    </section>
+
+
+    <!-- 11 DO / DON'T -->
+    <section id="dodont">
+      <div class="section-num">11</div>
+      <h2>Do / Don't</h2>
+
+      <div class="rule-grid">
+        <div class="rule-col">
+          <div class="rule-col-label">Do</div>
+          <ul>
+            <li>Cool mineral paper (#ecf1f0) as the default background</li>
+            <li>IBM Plex family — serif, sans, mono only</li>
+            <li>21px reading base, 16px compact UI base</li>
+            <li>Brand green as the primary accent, used sparingly</li>
+            <li>Semantic amber / red / blue reserved for status use</li>
+            <li>Grid-based layouts and compositions</li>
+            <li>Serif for headlines, mono for labels</li>
+            <li>One shared animation palette across all renderers</li>
+            <li>Top-down and isometric as the two permitted grid states</li>
+            <li>The ⏚ symbol as a repeatable brand element</li>
+            <li>Floating vs grounded as the visual grammar for product diagrams</li>
+            <li>Precise numbers over vague claims</li>
+            <li>Generous whitespace — let the grid breathe</li>
+            <li>Dark surfaces as deliberate hero, canvas, and CTA moments</li>
+          </ul>
+        </div>
+        <div class="rule-col">
+          <div class="rule-col-label">Don't</div>
+          <ul>
+            <li>Dark mode as the default / primary brand state</li>
+            <li>Neon, rainbow, or multi-color palette drift</li>
+            <li>Gradient text — ever</li>
+            <li>Separate about / platform / stream color systems</li>
+            <li>Using status colors as general marketing accents</li>
+            <li>Blob illustration or character art</li>
+            <li>Heavy blur, glossy glass theatrics, or generic SaaS sheen</li>
+            <li>Side-stripe accent borders</li>
+            <li>Cymatics / Flatlands visual language (retired Apr 30)</li>
+            <li>Anamorphic dot clouds or organic fluid shapes</li>
+            <li>The word "supercharges" or any hyperbole verb</li>
+            <li>Consumer or lifestyle aesthetic signals</li>
+            <li>Grid as decoration — every canvas must mean something</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- 12 REFERENCE BRANDS -->
+    <section id="refs">
+      <div class="section-num">12</div>
+      <h2>Reference brands</h2>
+
+      <ul class="spec-list">
+        <li>
+          <span class="spec-key">Stripe</span>
+          <span class="spec-val">Tone, infrastructure confidence, developer trust</span>
+        </li>
+        <li>
+          <span class="spec-key">Column.com</span>
+          <span class="spec-val">Closest category peer — banking API, warm off-white, Suisse + Mono, institutional calm</span>
+        </li>
+        <li>
+          <span class="spec-key">Mercury</span>
+          <span class="spec-val">Modern financial trust, warm editorial feel</span>
+        </li>
+        <li>
+          <span class="spec-key">AWS</span>
+          <span class="spec-val">Infrastructure authority, no-frills confidence</span>
+        </li>
+        <li>
+          <span class="spec-key">Linear.app</span>
+          <span class="spec-val">Tone — precision and quiet confidence, minimal aesthetic</span>
+        </li>
+        <li>
+          <span class="spec-key">Increase.com</span>
+          <span class="spec-val">Pure infrastructure, absolute minimal</span>
+        </li>
+        <li>
+          <span class="spec-key">Fireblocks</span>
+          <span class="spec-val">Institutional crypto credibility without consumer flash</span>
+        </li>
+      </ul>
+    </section>
+
+
+    <!-- 13 PROTOTYPE FILES -->
+    <section id="prototype">
+      <div class="section-num">13</div>
+      <h2>Prototype files</h2>
+
+      <p>These are the canonical working files as of May 28, 2026. Any new component or visual execution should reference these before starting.</p>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">Ground Brand Guide v1 (Figma)</div>
+          <div class="file-ref-desc">Current design-system source of truth for the official v1 palette, role-based type set, and the simplified pattern families.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">source/styles/tokens.css</div>
+          <div class="file-ref-desc">Live website token source: cooler neutral ramp, shared signal palette, and semantic status colors.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">clientshowgrid.html</div>
+          <div class="file-ref-desc">Primary client-facing prototype. Canvas hero (top-down ↔ isometric), value panels, platform section with interactive scene switching. Source of truth for the grid visual system.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">CLground_view_system.html</div>
+          <div class="file-ref-desc">Projection engine prototype. t=0 top-down, t=1 isometric, slider between. Five named scenes. The technical reference for the perspective shift animation.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">execution/design-language.html</div>
+          <div class="file-ref-desc">Ground design language reference. Type, spacing, component patterns.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">execution/ground-color-system.html</div>
+          <div class="file-ref-desc">Full color system with swatches, usage rules, and dark/light context examples.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">execution/visual-asset-reference.html</div>
+          <div class="file-ref-desc">Visual asset reference — grid scenes, logo variations, illustration inventory.</div>
+        </div>
+      </div>
+
+      <div class="file-ref">
+        <div class="file-ref-icon">⬜</div>
+        <div>
+          <div class="file-ref-name">CLground_visual_language.md</div>
+          <div class="file-ref-desc">Technical spec for the grid system — cube face rules, camera states, projection math, scene definitions.</div>
+        </div>
+      </div>
+
+      <h3>What this doc is not</h3>
+      <p>This is the rules layer — between the brief and the full brand bible. It is meant to be sharpened, corrected, and handed to any collaborator (human or AI) as a starting context. It will eventually be replaced by a full standalone brand bible site. Until then, treat it as the operating document.</p>
+
+      <p style="margin-top: 24px; font-family: var(--mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.06em;">
+        GROUND BRAND RULES · v1.0 · May 28 2026 · Official palette and type system locked
+      </p>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

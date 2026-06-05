@@ -16,6 +16,12 @@
     return Number.isFinite(value) ? value : fallback;
   }
 
+  function readCssRgbTriplet(name, fallback) {
+    const value = rootStyles.getPropertyValue(name).trim();
+    const parts = value.split(/\s+/).map(Number);
+    return parts.length === 3 && parts.every(Number.isFinite) ? parts : fallback;
+  }
+
   function clamp(value, min, max) {
     return Math.min(max, Math.max(min, value));
   }
@@ -49,85 +55,83 @@
     return `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${clamp(alpha, 0, 1)})`;
   }
 
-  // Shared palette data for the static scene renderer and the animated stream renderer.
-  const SCENE_PALETTES = {
-      about: {
-        groundEmpty: [32, 50, 44],
-        groundOccupied: [48, 72, 64],
-        groundLine: [95, 128, 114],
-        top: [227, 237, 232],
-        left: [207, 219, 213],
-        right: [188, 202, 196],
-        line: [164, 181, 174],
-        signalTop: [75, 195, 128],
-        signalLeft: [22, 105, 58],
-        signalRight: [15, 80, 42],
-        signalLine: [55, 145, 95],
-        mutedTop: [55, 72, 62],
-        mutedLeft: [38, 52, 44],
-        mutedRight: [28, 40, 32],
-        mutedLine: [60, 80, 68],
-        groundAlpha: 0.38
+  // The animation system now reads from one shared color family derived from
+  // the same official tokens we use elsewhere in the site. Dark and light
+  // surfaces share the same signal range while resolving different neutrals.
+  const UNIFIED_SIGNAL_PALETTE = {
+      signalTop: readCssRgbTriplet("--signal-bright-rgb", [145, 225, 172]),
+      signalLeft: readCssRgbTriplet("--signal-mid-rgb", [115, 190, 142]),
+      signalRight: readCssRgbTriplet("--signal-deep-rgb", [75, 195, 128]),
+      signalLine: readCssRgbTriplet("--signal-mid-rgb", [115, 190, 142]),
+      glow: readCssRgbTriplet("--glow-soft-rgb", [186, 230, 205])
+    };
+
+  const UNIFIED_ANIMATION_PALETTES = {
+      dark: {
+        groundEmpty: readCssRgbTriplet("--ink-rgb", [25, 33, 29]),
+        groundOccupied: readCssRgbTriplet("--dark-surface-rgb", [37, 57, 50]),
+        groundLine: readCssRgbTriplet("--text-secondary-rgb", [90, 98, 95]),
+        top: readCssRgbTriplet("--paper-soft-rgb", [242, 246, 245]),
+        left: readCssRgbTriplet("--paper-rgb", [236, 241, 240]),
+        right: readCssRgbTriplet("--paper-strong-rgb", [227, 234, 232]),
+        line: readCssRgbTriplet("--border-subtle-rgb", [209, 217, 216]),
+        wakeTop: [255, 255, 255],
+        wakeLeft: readCssRgbTriplet("--paper-soft-rgb", [242, 246, 245]),
+        wakeRight: readCssRgbTriplet("--paper-rgb", [236, 241, 240]),
+        wakeLine: readCssRgbTriplet("--border-subtle-rgb", [209, 217, 216]),
+        mutedTop: readCssRgbTriplet("--dark-surface-rgb", [37, 57, 50]),
+        mutedLeft: readCssRgbTriplet("--ink-rgb", [25, 33, 29]),
+        mutedRight: readCssRgbTriplet("--ink-rgb", [25, 33, 29]),
+        mutedLine: readCssRgbTriplet("--text-secondary-rgb", [90, 98, 95]),
+        groundAlpha: 0.28,
+        ...UNIFIED_SIGNAL_PALETTE
       },
-      platform: {
-        groundEmpty: [239, 243, 240],
-        groundOccupied: [231, 236, 232],
-        groundLine: [42, 61, 55],
-        top: [237, 244, 241],
-        left: [207, 217, 212],
-        right: [188, 200, 195],
-        line: [42, 61, 55],
-        signalTop: [109, 184, 141],
-        signalLeft: [83, 160, 116],
-        signalRight: [68, 140, 98],
-        signalLine: [55, 123, 86],
-        mutedTop: [221, 231, 224],
-        mutedLeft: [201, 212, 204],
-        mutedRight: [184, 194, 187],
-        mutedLine: [98, 114, 107],
-        groundAlpha: 0.22
+      light: {
+        groundEmpty: readCssRgbTriplet("--paper-soft-rgb", [242, 246, 245]),
+        groundOccupied: readCssRgbTriplet("--paper-strong-rgb", [227, 234, 232]),
+        groundLine: readCssRgbTriplet("--border-subtle-rgb", [209, 217, 216]),
+        top: [255, 255, 255],
+        left: readCssRgbTriplet("--paper-rgb", [236, 241, 240]),
+        right: readCssRgbTriplet("--paper-strong-rgb", [227, 234, 232]),
+        line: readCssRgbTriplet("--border-subtle-rgb", [209, 217, 216]),
+        wakeTop: [255, 255, 255],
+        wakeLeft: readCssRgbTriplet("--paper-soft-rgb", [242, 246, 245]),
+        wakeRight: readCssRgbTriplet("--paper-rgb", [236, 241, 240]),
+        wakeLine: readCssRgbTriplet("--border-subtle-rgb", [209, 217, 216]),
+        mutedTop: readCssRgbTriplet("--paper-strong-rgb", [227, 234, 232]),
+        mutedLeft: readCssRgbTriplet("--paper-rgb", [236, 241, 240]),
+        mutedRight: readCssRgbTriplet("--paper-strong-rgb", [227, 234, 232]),
+        mutedLine: readCssRgbTriplet("--text-secondary-rgb", [90, 98, 95]),
+        groundAlpha: 0.22,
+        ...UNIFIED_SIGNAL_PALETTE
       }
     };
 
+  const VALUE_ICON_PALETTE = {
+      groundEmpty:   [255, 255, 255],
+      groundOccupied:[255, 255, 255],
+      groundLine:    [255, 255, 255],
+      groundAlpha:   0,
+      top:    readCssRgbTriplet("--signal-mid-rgb",    [115, 190, 142]),
+      left:   [255, 255, 255],
+      right:  [255, 255, 255],
+      line:   readCssRgbTriplet("--signal-mid-rgb",    [115, 190, 142]),
+      mutedTop:  [255, 255, 255],
+      mutedLeft: [255, 255, 255],
+      mutedRight:[255, 255, 255],
+      mutedLine: [255, 255, 255],
+      ...UNIFIED_SIGNAL_PALETTE
+    };
+
+  const SCENE_PALETTES = {
+      about:       UNIFIED_ANIMATION_PALETTES.dark,
+      platform:    UNIFIED_ANIMATION_PALETTES.light,
+      "value-icon": VALUE_ICON_PALETTE
+    };
+
   const STREAM_SCENE_PALETTES = {
-      dark: {
-        groundEmpty: [12, 20, 17],
-        groundOccupied: [16, 28, 23],
-        groundLine: [57, 86, 74],
-        top: [220, 230, 225],
-        left: [190, 202, 195],
-        right: [161, 173, 166],
-        line: [129, 145, 137],
-        wakeTop: [244, 247, 245],
-        wakeLeft: [217, 224, 220],
-        wakeRight: [191, 199, 194],
-        wakeLine: [186, 197, 191],
-        signalTop: [145, 225, 172],
-        signalLeft: [85, 178, 129],
-        signalRight: [41, 121, 81],
-        signalLine: [103, 185, 138],
-        glow: [121, 206, 155],
-        groundAlpha: 0.44
-      },
-      light: {
-        groundEmpty: [246, 249, 247],
-        groundOccupied: [235, 241, 237],
-        groundLine: [172, 186, 177],
-        top: [252, 254, 252],
-        left: [236, 242, 238],
-        right: [219, 228, 223],
-        line: [155, 169, 160],
-        wakeTop: [255, 255, 255],
-        wakeLeft: [245, 249, 246],
-        wakeRight: [232, 238, 234],
-        wakeLine: [191, 202, 194],
-        signalTop: [115, 190, 142],
-        signalLeft: [83, 162, 114],
-        signalRight: [63, 138, 95],
-        signalLine: [82, 153, 111],
-        glow: [115, 190, 142],
-        groundAlpha: 0.2
-      }
+      dark: UNIFIED_ANIMATION_PALETTES.dark,
+      light: UNIFIED_ANIMATION_PALETTES.light
     };
 
   // Scene-building helpers used by both value cards and platform scenes.
@@ -717,9 +721,9 @@
     };
 
     const VALUE_WIDE_GRID_SCROLL_TILT = {
-      startRatio: 0.6,
-      endRatio: -0.24,
-      delayProgress: 0.04
+      startRatio: 0.92,
+      endRatio: 0.35,
+      delayProgress: 0
     };
 
     const SAVE_TIME_KEYFRAME_ROUTES = [
@@ -1667,6 +1671,25 @@
       });
     }
 
+    function applyNamedStreamMotionProfile(renderer, motionProfile, now) {
+      if (motionProfile === "save-time-keyframe") {
+        applySaveTimeKeyframeProfile(renderer, now);
+        return true;
+      }
+
+      if (motionProfile === "grow-balance-bars") {
+        applyGrowBalanceBarsProfile(renderer, now);
+        return true;
+      }
+
+      if (motionProfile === "oversee-scan-lock") {
+        applyOverseeScanLockProfile(renderer, now);
+        return true;
+      }
+
+      return false;
+    }
+
     function renderStreamSceneRenderer(renderer, now, dtSeconds) {
       if (!renderer) {
         return;
@@ -1687,13 +1710,7 @@
       if (reduceMotion) {
         if (isSaveTimeKeyframe || isGrowBalanceBars || isOverseeScanLock) {
           renderer.targetView = 0.05;
-          if (isSaveTimeKeyframe) {
-            applySaveTimeKeyframeProfile(renderer, now);
-          } else if (isGrowBalanceBars) {
-            applyGrowBalanceBarsProfile(renderer, now);
-          } else {
-            applyOverseeScanLockProfile(renderer, now);
-          }
+          applyNamedStreamMotionProfile(renderer, renderer.motionProfile, now);
         } else {
           renderer.targetView = renderer.baseView;
           renderer.scene.cells.forEach((cell, index) => {
@@ -1708,19 +1725,19 @@
           ? getDelayedExitScrollTilt(renderer.scrollElement, renderer.scrollTiltOptions)
           : getDelayedExitScrollTilt(renderer.scrollElement, VALUE_WIDE_GRID_SCROLL_TILT);
         renderer.targetView = mix(0.015, 0.34, scrollTilt);
-        applySaveTimeKeyframeProfile(renderer, now);
+        applyNamedStreamMotionProfile(renderer, renderer.motionProfile, now);
       } else if (isGrowBalanceBars) {
         const scrollTilt = renderer.scrollTiltOptions
           ? getDelayedExitScrollTilt(renderer.scrollElement, renderer.scrollTiltOptions)
           : getDelayedExitScrollTilt(renderer.scrollElement, VALUE_WIDE_GRID_SCROLL_TILT);
         renderer.targetView = mix(0.015, 0.34, scrollTilt);
-        applyGrowBalanceBarsProfile(renderer, now);
+        applyNamedStreamMotionProfile(renderer, renderer.motionProfile, now);
       } else if (isOverseeScanLock) {
         const scrollTilt = renderer.scrollTiltOptions
           ? getDelayedExitScrollTilt(renderer.scrollElement, renderer.scrollTiltOptions)
           : getDelayedExitScrollTilt(renderer.scrollElement, VALUE_WIDE_GRID_SCROLL_TILT);
         renderer.targetView = mix(0.015, 0.34, scrollTilt);
-        applyOverseeScanLockProfile(renderer, now);
+        applyNamedStreamMotionProfile(renderer, renderer.motionProfile, now);
       } else {
         const scrollTilt = renderer.tiltMode === "exit"
           ? renderer.scrollTiltOptions
@@ -2008,6 +2025,7 @@
     resizeSceneRenderer,
     renderSceneRenderer,
     createStreamSceneRenderer,
-    renderStreamSceneRenderer
+    renderStreamSceneRenderer,
+    applyNamedStreamMotionProfile
   });
 })();

@@ -20,6 +20,9 @@
   gap: 36px;
   align-items: start;
   padding: 40px;
+  width: 100%;
+  max-width: 75%;
+  margin-inline: auto;
   background: rgba(255, 255, 255, 0.66);
   border: 1px solid var(--ink-rule);
   box-shadow: var(--shadow-panel);
@@ -157,6 +160,7 @@
     grid-template-columns: 1fr;
     gap: 24px;
     padding: 28px;
+    max-width: 100%;
   }
 
   .founder-photo-wrap {

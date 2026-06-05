@@ -1,0 +1,409 @@
+.brand-guide-hero {
+  background:
+    radial-gradient(circle at 80% 12%, rgb(var(--yield-rgb) / 0.08), transparent 26%),
+    linear-gradient(180deg, rgb(var(--paper-rgb)) 0%, rgb(var(--paper-soft-rgb)) 100%);
+}
+
+.brand-guide-hero-inner {
+  max-width: 900px;
+}
+
+.brand-guide-overview,
+.brand-guide-palette,
+.brand-guide-motion {
+  --grid-bg-color: var(--paper);
+  --grid-line-color: rgb(var(--ink-rgb) / 0.045);
+  --grid-underlay-image: linear-gradient(180deg, rgb(255 255 255 / 0.48), transparent 12%);
+}
+
+.brand-guide-stack {
+  display: grid;
+  gap: 36px;
+}
+
+.brand-guide-head {
+  display: grid;
+  gap: 12px;
+  max-width: 860px;
+}
+
+.brand-guide-head h2 {
+  margin-bottom: 0;
+  max-width: 14ch;
+  font-size: var(--text-3xl);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.brand-guide-head p:last-child {
+  max-width: 64ch;
+  margin-bottom: 0;
+  font-size: var(--text-md);
+  line-height: 1.7;
+}
+
+.brand-pillars,
+.brand-motion-grid,
+.brand-logo-grid,
+.brand-type-grid,
+.brand-palette-groups {
+  display: grid;
+  gap: 18px;
+}
+
+.brand-pillars {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.brand-pillar-card,
+.brand-logo-card,
+.brand-palette-card,
+.brand-type-card,
+.brand-motion-card,
+.brand-rule-col,
+.brand-scale-panel {
+  border: 1px solid var(--ink-rule);
+  background: rgb(255 255 255 / 0.72);
+  box-shadow: var(--shadow-panel);
+}
+
+.brand-pillar-card,
+.brand-logo-card,
+.brand-palette-card,
+.brand-type-card,
+.brand-motion-card,
+.brand-rule-col {
+  padding: 26px;
+}
+
+.brand-pillar-label,
+.brand-panel-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.brand-pillar-card p:last-child {
+  margin-top: 18px;
+  margin-bottom: 0;
+  font-size: var(--text-lg);
+  line-height: 1.52;
+  color: var(--ink);
+}
+
+.brand-logo-grid,
+.brand-type-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.brand-logo-card--dark {
+  --grid-bg-color: var(--hero-dark);
+  --grid-line-color: rgb(var(--paper-rgb) / 0.08);
+  background:
+    linear-gradient(180deg, rgb(var(--paper-rgb) / 0.03), transparent 20%),
+    var(--hero-dark);
+  color: rgb(var(--paper-rgb));
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.brand-logo-card--dark .brand-panel-label,
+.brand-logo-card--dark .brand-panel-note {
+  color: rgb(var(--paper-rgb) / 0.72);
+}
+
+.brand-logo-stage {
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+}
+
+.brand-guide-wordmark {
+  width: min(100%, 460px);
+  height: auto;
+  display: block;
+}
+
+.brand-panel-note {
+  margin-top: 18px;
+  margin-bottom: 0;
+  max-width: 44ch;
+  color: var(--ink-soft);
+}
+
+.brand-clearspace {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 260px;
+  padding: 34px 34px 26px;
+}
+
+.brand-clearspace-frame {
+  padding: 36px;
+  border: 1px dashed rgb(var(--ink-rgb) / 0.18);
+  background:
+    linear-gradient(180deg, rgb(var(--paper-rgb)), rgb(var(--paper-soft-rgb)));
+}
+
+.brand-clearspace-safe {
+  padding: 26px 32px;
+  border: 1px solid rgb(var(--yield-rgb) / 0.28);
+  background: rgb(var(--paper-rgb));
+}
+
+.brand-guide-wordmark--clearspace {
+  width: min(100%, 300px);
+  color: var(--ink);
+}
+
+.brand-clearspace-axis {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.brand-clearspace-axis--top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.brand-clearspace-axis--right {
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center;
+}
+
+.brand-palette-groups {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+
+.brand-swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.brand-swatch {
+  display: grid;
+  gap: 6px;
+}
+
+.brand-swatch-block {
+  width: 100%;
+  aspect-ratio: 1.18;
+  border: 1px solid rgb(var(--ink-rgb) / 0.08);
+}
+
+.brand-swatch-name,
+.brand-swatch-hex {
+  font-family: var(--font-mono);
+}
+
+.brand-swatch-name {
+  font-size: var(--text-2xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.brand-swatch-hex {
+  font-size: var(--text-2xs);
+  color: var(--ink-faint);
+}
+
+.brand-type-card--display {
+  background:
+    radial-gradient(circle at 70% 24%, rgb(var(--yield-rgb) / 0.08), transparent 30%),
+    rgb(255 255 255 / 0.72);
+}
+
+.brand-type-sample {
+  margin-top: 18px;
+}
+
+.brand-type-sample--hero {
+  font-family: var(--font-serif);
+  font-size: clamp(2.6rem, 4.2vw, 4.2rem);
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.brand-type-sample--body {
+  max-width: 30ch;
+  font-size: 21px;
+  line-height: 1.62;
+  color: var(--ink);
+}
+
+.brand-scale-panel {
+  padding: 26px;
+}
+
+.brand-scale-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.brand-scale-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 18px;
+  border: 1px solid var(--ink-rule);
+  background: rgb(var(--paper-rgb) / 0.72);
+}
+
+.brand-scale-item span {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+.brand-scale-item strong {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.brand-motion-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.brand-motion-card h3 {
+  margin: 18px 0 10px;
+  font-family: var(--font-serif);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-transform: none;
+}
+
+.brand-motion-card p:last-child {
+  margin-bottom: 0;
+}
+
+.brand-motion-card {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.brand-motion-card:not(.brand-motion-card--dark):hover,
+.brand-motion-card:not(.brand-motion-card--dark):focus-within {
+  background: rgb(255 255 255);
+  border-color: var(--ink-rule-strong);
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-3px);
+}
+
+.brand-motion-card--dark {
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.brand-motion-card--dark:hover,
+.brand-motion-card--dark:focus-within {
+  background: var(--hero-dark);
+  border-color: transparent;
+  box-shadow: none;
+  transform: translateY(-3px);
+}
+
+.brand-motion-card--dark:hover .brand-panel-label,
+.brand-motion-card--dark:focus-within .brand-panel-label {
+  color: rgb(var(--paper-rgb) / 0.62);
+}
+
+.brand-motion-card--dark:hover h3,
+.brand-motion-card--dark:focus-within h3 {
+  color: rgb(var(--paper-rgb));
+}
+
+.brand-motion-card--dark:hover p:last-child,
+.brand-motion-card--dark:focus-within p:last-child {
+  color: rgb(var(--paper-rgb) / 0.7);
+}
+
+.brand-voice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.brand-voice-card {
+  border: 1px solid var(--ink-rule);
+  background: rgb(255 255 255 / 0.72);
+  box-shadow: var(--shadow-panel);
+  padding: 26px;
+}
+
+.brand-voice-card p:last-child {
+  margin: 18px 0 0;
+  color: var(--ink);
+  line-height: 1.62;
+}
+
+.brand-voice-note {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 1100px) {
+  .brand-pillars,
+  .brand-palette-groups,
+  .brand-motion-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .brand-logo-grid,
+  .brand-type-grid,
+  .brand-voice-grid,
+  .brand-scale-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .brand-pillar-card,
+  .brand-logo-card,
+  .brand-palette-card,
+  .brand-type-card,
+  .brand-motion-card,
+  .brand-voice-card,
+  .brand-scale-panel {
+    padding: 22px;
+  }
+
+  .brand-clearspace-axis--right {
+    display: none;
+  }
+}
