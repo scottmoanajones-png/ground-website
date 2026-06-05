@@ -23,9 +23,13 @@
   <meta name="twitter:title" content="Ground — The Money Infrastructure Company">
   <meta name="twitter:description" content="Ground's infrastructure supercharges any stablecoin or cash on your platform, transforming it into a high yield balance. Noncustodial, institutional-grade, API-first.">
   <meta name="twitter:image" content="https://groundtech.co/og-image.jpg">
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSans-300.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSans.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexMono-400.woff2" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexMono-500.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="assets/fonts/IBMPlexSerif-400.woff2" crossorigin>
   <script>document.documentElement.classList.add("js");</script>
-  <link rel="stylesheet" href="css/homepage.7c82bccf.bundle.css">
+  <link rel="stylesheet" href="css/homepage.8d0ffb85.bundle.css">
 </head>
 <body id="top">
   <header class="site-header">
@@ -43,7 +47,7 @@
         <a href="https://docs.groundtech.co/docs/portfolio-wallets/introduction" target="_blank" rel="noopener">Documentation</a>
         <a href="contact.html">Contact</a>
       </nav>
-      <a class="button button-light" href="contact.html">Let's talk</a>
+      <a class="button button-light" href="https://portal.groundtech.co/login">Login</a>
       <button type="button" class="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-mobile">
         <span class="nav-toggle-bar"></span>
         <span class="nav-toggle-bar"></span>
@@ -52,6 +56,7 @@
     </div>
   </header>
   <div class="nav-mobile" id="nav-mobile" aria-hidden="true">
+    <canvas class="nav-shimmer-canvas" aria-hidden="true"></canvas>
     <div class="nav-mobile-inner">
       <nav class="nav-mobile-links" aria-label="Mobile navigation">
         <a href="about.html">About</a>
@@ -59,7 +64,7 @@
         <a href="https://docs.groundtech.co/docs/portfolio-wallets/introduction" target="_blank" rel="noopener">Documentation</a>
         <a href="contact.html">Contact</a>
       </nav>
-      <a class="button nav-mobile-cta" href="contact.html">Let's talk</a>
+      <a class="button nav-mobile-cta" href="https://portal.groundtech.co/login">Login</a>
     </div>
   </div>
 
@@ -73,7 +78,7 @@
         <div aria-hidden="true"></div>
         <div class="hero-copy" data-reveal>
           <p class="eyebrow">The Money Infrastructure Company</p>
-          <h1 id="hero-title">On-chain yield infrastructure for <span class="accent accent--rotate" id="heroAccentWord" aria-live="polite" aria-atomic="true">Banks</span></h1>
+          <h1 id="hero-title">On-chain yield infrastructure for<br><span class="accent accent--rotate" id="heroAccentWord" aria-live="polite" aria-atomic="true">Banks</span></h1>
           <p class="hero-subhead">
             Any stablecoin or cash balance on your platform already carries potential yield.
             Ground connects it to the full on-chain yield grid &mdash; 24+ sources, noncustodial,
@@ -93,37 +98,58 @@
         <div class="proof-head" data-reveal>
           <span class="proof-tag" id="proof-title">Backed by</span>
         </div>
-        <div class="proof-row" aria-label="Ground investors">
-                    <a class="proof-chip" href="https://baincapitalcrypto.com/" target="_blank" rel="noopener" aria-label="Bain Capital Crypto" data-reveal style="--delay: 0ms;">
+      </div>
+      <div class="proof-marquee-track">
+        <div class="proof-marquee" aria-label="Ground investors">
+          <div class="proof-marquee-group">
+                      <a class="proof-chip" href="https://baincapitalcrypto.com/" target="_blank" rel="noopener" aria-label="Bain Capital Crypto">
             <img src="assets/logos/investors/logo-bcc-light.svg" alt="Bain Capital Crypto" loading="lazy" decoding="async">
           </a>
-          <a class="proof-chip" href="https://parafi.com/" target="_blank" rel="noopener" aria-label="ParaFi" data-reveal style="--delay: 80ms;">
+          <a class="proof-chip" href="https://parafi.com/" target="_blank" rel="noopener" aria-label="ParaFi">
             <img src="assets/logos/investors/logo-parafi-light.svg" alt="ParaFi" loading="lazy" decoding="async">
           </a>
-          <a class="proof-chip" href="https://nascent.xyz/" target="_blank" rel="noopener" aria-label="Nascent" data-reveal style="--delay: 160ms;">
+          <a class="proof-chip" href="https://nascent.xyz/" target="_blank" rel="noopener" aria-label="Nascent">
             <img src="assets/logos/investors/logo-nascent-light.svg" alt="Nascent" loading="lazy" decoding="async">
           </a>
-          <a class="proof-chip" href="https://robvc.com/" target="_blank" rel="noopener" aria-label="Robot Ventures" data-reveal style="--delay: 240ms;">
+          <a class="proof-chip" href="https://robvc.com/" target="_blank" rel="noopener" aria-label="Robot Ventures">
             <img src="assets/logos/investors/logo-robovc-light.svg" alt="Robot Ventures" loading="lazy" decoding="async">
           </a>
-          <a class="proof-chip" href="https://www.chapterone.com/" target="_blank" rel="noopener" aria-label="Chapter One" data-reveal style="--delay: 320ms;">
+          <a class="proof-chip" href="https://www.chapterone.com/" target="_blank" rel="noopener" aria-label="Chapter One">
             <img src="assets/logos/investors/logo-chp1-light.svg" alt="Chapter One" loading="lazy" decoding="async">
           </a>
+          </div>
+          <div class="proof-marquee-group" aria-hidden="true">
+                      <span class="proof-chip">
+            <img src="assets/logos/investors/logo-bcc-light.svg" alt="" loading="lazy" decoding="async">
+          </span>
+          <span class="proof-chip">
+            <img src="assets/logos/investors/logo-parafi-light.svg" alt="" loading="lazy" decoding="async">
+          </span>
+          <span class="proof-chip">
+            <img src="assets/logos/investors/logo-nascent-light.svg" alt="" loading="lazy" decoding="async">
+          </span>
+          <span class="proof-chip">
+            <img src="assets/logos/investors/logo-robovc-light.svg" alt="" loading="lazy" decoding="async">
+          </span>
+          <span class="proof-chip">
+            <img src="assets/logos/investors/logo-chp1-light.svg" alt="" loading="lazy" decoding="async">
+          </span>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section value-section" id="about">
-      <div class="shell value-shell">
-        <div class="value-copy" data-reveal>
+      <div class="shell">
+        <div class="value-header" data-reveal>
           <p class="eyebrow">Noncustodial and Institutional-grade</p>
-          <h2>On-chain yield. Zero overhead.</h2>
+          <h2>On-chain yield.<br>Zero overhead.</h2>
         </div>
 
         <div class="value-cards">
-          <article class="value-card value-card--full-bleed" data-reveal style="--delay: 50ms;">
-            <div class="value-art value-art--full-bleed" data-ground-scene="save-time-converge-stream" data-ground-renderer="stream-grid" data-ground-grid-structure="value-wide" data-ground-stream-motion="grow-balance-bars" data-surface-theme="light" aria-hidden="true">
-              <canvas class="value-art-canvas"></canvas>
+          <article class="value-card" data-reveal style="--delay: 140ms;">
+            <div class="value-icon" data-ground-scene="value-icon-grow-balance" aria-hidden="true">
+              <canvas class="value-icon-canvas"></canvas>
             </div>
             <div class="value-text">
               <h3>Grow Your Balance</h3>
@@ -135,12 +161,12 @@
             </div>
           </article>
 
-          <article class="value-card value-card--full-bleed" data-reveal style="--delay: 100ms;">
-            <div class="value-art value-art--full-bleed" data-ground-scene="save-time-converge-stream" data-ground-renderer="stream-grid" data-ground-grid-structure="value-wide" data-ground-stream-motion="save-time-keyframe" data-surface-theme="light" aria-hidden="true">
-              <canvas class="value-art-canvas"></canvas>
+          <article class="value-card" data-reveal style="--delay: 280ms;">
+            <div class="value-icon" data-ground-scene="value-icon-save-time" aria-hidden="true">
+              <canvas class="value-icon-canvas"></canvas>
             </div>
             <div class="value-text">
-              <h3>Save Time</h3>
+              <h3>Save your time</h3>
               <p>
                 REST APIs plug directly into end-user interfaces and your ledger.
                 Agentic or manual integration of a diverse catalogue is fast and easy.
@@ -148,9 +174,9 @@
             </div>
           </article>
 
-          <article class="value-card value-card--full-bleed" data-reveal style="--delay: 150ms;">
-            <div class="value-art value-art--full-bleed" data-ground-scene="save-time-converge-stream" data-ground-renderer="stream-grid" data-ground-grid-structure="value-wide" data-ground-stream-motion="oversee-scan-lock" data-surface-theme="light" aria-hidden="true">
-              <canvas class="value-art-canvas"></canvas>
+          <article class="value-card" data-reveal style="--delay: 420ms;">
+            <div class="value-icon" data-ground-scene="value-icon-oversee-yield" aria-hidden="true">
+              <canvas class="value-icon-canvas"></canvas>
             </div>
             <div class="value-text">
               <h3>Oversee Your Yield</h3>
@@ -164,99 +190,68 @@
       </div>
     </section>
 
-    <section class="section platform-section" id="platforms">
-      <div class="shell platform-shell">
-        <div class="platform-callout" data-reveal style="--delay: 90ms;">
-          <div class="platform-head">
-            <p class="eyebrow">Designed for every kind of platform</p>
-            <h2>Connect your platform to the full on-chain yield grid &mdash; liquid, instant, always available.</h2>
-          </div>
+    <section class="section usecase-section" id="usecases">
+      <div class="shell">
+        <div class="usecase-head" data-reveal>
+          <p class="eyebrow">Designed for every kind of platform</p>
+          <h2>Connect your platform to the full on-chain yield grid &mdash; liquid, instant, always available.</h2>
+        </div>
+      </div>
 
-          <div class="platform-grid">
-            <div class="platform-groups">
-              <button class="platform-group is-active" type="button" data-platform-scene="0" data-platform-key="consumer" aria-pressed="true">
-                <div class="platform-group-head">
-                  <div class="platform-group-pip"></div>
-                  <span class="platform-group-label">Consumer Platforms</span>
-                </div>
-                <div class="platform-group-chips">
-                  <span class="platform-chip">Banks</span>
-                  <span class="platform-chip">Neobanks</span>
-                  <span class="platform-chip">Wallets</span>
-                  <span class="platform-chip">Fintechs</span>
-                </div>
-              </button>
+      <div class="usecase-rows">
+        <div class="shell usecase-pairs">
 
-              <button class="platform-group" type="button" data-platform-scene="1" data-platform-key="infrastructure" aria-pressed="false">
-                <div class="platform-group-head">
-                  <div class="platform-group-pip"></div>
-                  <span class="platform-group-label">Market Infrastructure</span>
-                </div>
-                <div class="platform-group-chips">
-                  <span class="platform-chip">Exchanges</span>
-                  <span class="platform-chip">Custodians</span>
-                </div>
-              </button>
-
-              <button class="platform-group" type="button" data-platform-scene="2" data-platform-key="institutions" aria-pressed="false">
-                <div class="platform-group-head">
-                  <div class="platform-group-pip"></div>
-                  <span class="platform-group-label">Capital &amp; Institutions</span>
-                </div>
-                <div class="platform-group-chips">
-                  <span class="platform-chip">Corporate Treasuries</span>
-                  <span class="platform-chip">Investment &amp; Wealth Managers</span>
-                </div>
-              </button>
-            </div>
-
-            <div class="platform-visual-wrap">
-              <div class="platform-visual-shell" data-platform-atlas data-platform-active="consumer" aria-hidden="true">
-                <div class="platform-visual">
-                  <canvas id="platformScene"></canvas>
-                </div>
+          <div class="usecase-pair" data-usecase-reveal>
+            <article class="usecase-card usecase-card--featured">
+              <div class="usecase-copy">
+                <h3>Improve portfolio performance with yield on idle cash.</h3>
+                <p>
+                  Stop leaving money on the table. Put idle cash to work across
+                  diversified, liquid yield sources.
+                </p>
               </div>
+            </article>
+            <div class="usecase-animation" data-ground-scene="save-time-converge-stream" data-ground-renderer="stream-grid" data-ground-grid-structure="value-wide" data-ground-stream-motion="grow-balance-bars" data-surface-theme="light" aria-hidden="true">
+              <canvas class="usecase-animation-canvas"></canvas>
             </div>
           </div>
+
+          <div class="usecase-pair usecase-pair--reverse" data-usecase-reveal>
+            <article class="usecase-card">
+              <div class="usecase-copy">
+                <h3>Acquire and retain users with yield on their balances.</h3>
+                <p>
+                  Turn idle customer balances into earning balances. Give your users
+                  a reason to deposit more and stay longer.
+                </p>
+              </div>
+            </article>
+            <div class="usecase-animation" data-ground-scene="save-time-converge-stream" data-ground-renderer="stream-grid" data-ground-grid-structure="value-wide" data-ground-stream-motion="save-time-keyframe" data-surface-theme="light" aria-hidden="true">
+              <canvas class="usecase-animation-canvas"></canvas>
+            </div>
+          </div>
+
+          <div class="usecase-pair" data-usecase-reveal>
+            <article class="usecase-card">
+              <div class="usecase-copy">
+                <h3>Generate revenue streams with differentiated yield offerings.</h3>
+                <p>
+                  Offer yield products that set you apart. Build new business lines
+                  backed by on-chain strategies.
+                </p>
+              </div>
+            </article>
+            <div class="usecase-animation" data-ground-scene="save-time-converge-stream" data-ground-renderer="stream-grid" data-ground-grid-structure="value-wide" data-ground-stream-motion="oversee-scan-lock" data-surface-theme="light" aria-hidden="true">
+              <canvas class="usecase-animation-canvas"></canvas>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>
 
-    <section class="section usecases grid-bg" id="usecases">
-      <div class="shell usecase-stack">
-        <article class="usecase-card usecase-card--featured" data-usecase-shimmer>
-          <div class="usecase-copy">
-            <h3>Improve portfolio performance with yield on idle cash.</h3>
-            <p>
-              Stop leaving money on the table. Put idle cash to work across
-              diversified, liquid yield sources.
-            </p>
-          </div>
-          <span class="use-label">Yield advantage · funds &amp; treasuries</span>
-        </article>
-
-        <article class="usecase-card" data-usecase-shimmer>
-          <div class="usecase-copy">
-            <h3>Acquire and retain users with yield on their balances.</h3>
-            <p>
-              Turn idle customer balances into earning balances. Give your users
-              a reason to deposit more and stay longer.
-            </p>
-          </div>
-          <span class="use-label">Yield advantage · wallets &amp; neobanks</span>
-        </article>
-
-        <article class="usecase-card" data-usecase-shimmer>
-          <div class="usecase-copy">
-            <h3>Generate revenue streams with differentiated yield offerings.</h3>
-            <p>
-              Offer yield products that set you apart. Build new business lines
-              backed by on-chain strategies.
-            </p>
-          </div>
-          <span class="use-label">Yield advantage · exchanges &amp; fintechs</span>
-        </article>
-
+    <section class="section cta-section grid-bg" id="cta">
+      <div class="shell">
         <article class="usecase-card usecase-card--cta" data-usecase-shimmer>
           <div class="usecase-cta-inner">
             <div class="usecase-cta-content">
@@ -316,15 +311,15 @@
     </div>
   </footer>
 
-  <script src="js/common.6b6aa5c8.min.js" defer></script>
-  <script src="js/homepage-foundation.1696f405.min.js" defer></script>
-  <script src="js/homepage-value-scenes.172594df.min.js" defer></script>
-  <script src="js/homepage-platform-scene.faa9645d.min.js" defer></script>
-  <script src="js/homepage-hero-grid.7b0fa95b.min.js" defer></script>
+  <script src="js/common.a19da4cb.min.js" defer></script>
+  <script src="js/homepage-foundation.9e499579.min.js" defer></script>
+  <script src="js/homepage-value-scenes.04831667.min.js" defer></script>
+  <script src="js/homepage-platform-scene.11b5f595.min.js" defer></script>
+  <script src="js/homepage-hero-grid.a596e1b1.min.js" defer></script>
   <script src="js/homepage-footer-shimmer.bd28c045.min.js" defer></script>
-  <script src="js/homepage-usecase-shimmer.f1670f0a.min.js" defer></script>
-  <script src="js/homepage-cta-stream.067027af.min.js" defer></script>
+  <script src="js/homepage-usecase-shimmer.bb21ac87.min.js" defer></script>
+  <script src="js/homepage-cta-stream.1f81526c.min.js" defer></script>
   <script src="js/lazy-grid.bacb8e98.min.js" defer></script>
-  <script src="js/homepage.2d7035e6.min.js" defer></script>
+  <script src="js/homepage.a3f445d6.min.js" defer></script>
 </body>
 </html>
